@@ -2,6 +2,7 @@ package firestorm.vuth.springbootauth.filter
 
 import firestorm.vuth.springbootauth.exception.TokenException
 import firestorm.vuth.springbootauth.security.JwtService
+import io.jsonwebtoken.JwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -32,8 +33,13 @@ class JwtFilter(
             return
         }
 
-        if (jwtService.isTokenExpired(token.removePrefix("Bearer "))) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token")
+        try {
+            if (jwtService.isTokenExpired(token.removePrefix("Bearer "))) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token")
+                return
+            }
+        } catch (e: TokenException) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
             return
         }
 
