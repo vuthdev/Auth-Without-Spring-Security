@@ -1,8 +1,8 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.req.CreateRoleRequest
-import firestorm.vuth.springbootauth.dto.req.UpdateRoleRequest
-import firestorm.vuth.springbootauth.dto.res.RoleResponse
+import firestorm.vuth.springbootauth.dto.`request\`.CreateRoleRequest
+import firestorm.vuth.springbootauth.dto.`request\`.UpdateRoleRequest
+import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.mapper.toResponse
 import firestorm.vuth.springbootauth.model.Role

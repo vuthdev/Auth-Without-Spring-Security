@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.controller
 
-import firestorm.vuth.springbootauth.dto.req.CreatePermissionRequest
-import firestorm.vuth.springbootauth.dto.res.PermissionResponse
+import firestorm.vuth.springbootauth.dto.`request\`.CreatePermissionRequest
+import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

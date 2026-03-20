@@ -1,8 +1,7 @@
 package firestorm.vuth.springbootauth.service
 
-import firestorm.vuth.springbootauth.dto.req.CreatePermissionRequest
-import firestorm.vuth.springbootauth.dto.res.PermissionResponse
-import firestorm.vuth.springbootauth.model.Permission
+import firestorm.vuth.springbootauth.dto.`request\`.CreatePermissionRequest
+import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 
 interface PermissionService {
     fun createPermissions(request: CreatePermissionRequest): PermissionResponse

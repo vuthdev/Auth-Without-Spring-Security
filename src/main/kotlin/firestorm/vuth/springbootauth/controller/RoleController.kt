@@ -1,8 +1,8 @@
 package firestorm.vuth.springbootauth.controller
 
-import firestorm.vuth.springbootauth.dto.req.CreateRoleRequest
-import firestorm.vuth.springbootauth.dto.req.UpdateRoleRequest
-import firestorm.vuth.springbootauth.dto.res.RoleResponse
+import firestorm.vuth.springbootauth.dto.`request\`.CreateRoleRequest
+import firestorm.vuth.springbootauth.dto.`request\`.UpdateRoleRequest
+import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

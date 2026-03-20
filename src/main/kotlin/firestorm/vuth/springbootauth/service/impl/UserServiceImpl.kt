@@ -1,10 +1,10 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.req.AuthRequest
-import firestorm.vuth.springbootauth.dto.req.CreateUserRequest
-import firestorm.vuth.springbootauth.dto.res.LoginResponse
-import firestorm.vuth.springbootauth.dto.res.RegisterResponse
-import firestorm.vuth.springbootauth.dto.res.UserResponse
+import firestorm.vuth.springbootauth.dto.`request\`.AuthRequest
+import firestorm.vuth.springbootauth.dto.`request\`.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.response.LoginResponse
+import firestorm.vuth.springbootauth.dto.response.RegisterResponse
+import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.UnauthorizedException
 import firestorm.vuth.springbootauth.mapper.toResponse
@@ -14,7 +14,7 @@ import firestorm.vuth.springbootauth.repository.UserRepository
 import firestorm.vuth.springbootauth.security.JwtService
 import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.context.AuthContext
-import firestorm.vuth.springbootauth.dto.res.ProfileResponse
+import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.mapper.toProfileResponse
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

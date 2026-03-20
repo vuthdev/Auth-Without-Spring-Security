@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.req.CreatePermissionRequest
-import firestorm.vuth.springbootauth.dto.res.PermissionResponse
+import firestorm.vuth.springbootauth.dto.`request\`.CreatePermissionRequest
+import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.mapper.toResponse
 import firestorm.vuth.springbootauth.model.Permission
 import firestorm.vuth.springbootauth.repository.PermissionRepository

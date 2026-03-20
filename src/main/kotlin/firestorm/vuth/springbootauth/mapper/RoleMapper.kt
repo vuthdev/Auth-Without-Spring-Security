@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.mapper
 
-import firestorm.vuth.springbootauth.dto.res.PermissionResponse
-import firestorm.vuth.springbootauth.dto.res.RoleResponse
+import firestorm.vuth.springbootauth.dto.response.PermissionResponse
+import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.model.Role
 
 fun Role.toResponse(): RoleResponse = RoleResponse(

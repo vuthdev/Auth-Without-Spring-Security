@@ -1,6 +1,5 @@
-package firestorm.vuth.springbootauth.dto.res
+package firestorm.vuth.springbootauth.dto.response
 
-import firestorm.vuth.springbootauth.model.Role
 import java.util.UUID
 
 data class UserResponse(

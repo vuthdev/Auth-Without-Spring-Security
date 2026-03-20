@@ -1,4 +1,4 @@
-package firestorm.vuth.springbootauth.dto.req
+package firestorm.vuth.springbootauth.dto.`request\`
 
 import java.util.UUID
 

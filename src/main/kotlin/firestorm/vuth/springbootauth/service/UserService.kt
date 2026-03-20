@@ -1,12 +1,11 @@
 package firestorm.vuth.springbootauth.service
 
-import firestorm.vuth.springbootauth.dto.req.AuthRequest
-import firestorm.vuth.springbootauth.dto.req.CreateUserRequest
-import firestorm.vuth.springbootauth.dto.res.LoginResponse
-import firestorm.vuth.springbootauth.dto.res.ProfileResponse
-import firestorm.vuth.springbootauth.dto.res.RegisterResponse
-import firestorm.vuth.springbootauth.dto.res.UserResponse
-import firestorm.vuth.springbootauth.model.User
+import firestorm.vuth.springbootauth.dto.`request\`.AuthRequest
+import firestorm.vuth.springbootauth.dto.`request\`.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.response.LoginResponse
+import firestorm.vuth.springbootauth.dto.response.ProfileResponse
+import firestorm.vuth.springbootauth.dto.response.RegisterResponse
+import firestorm.vuth.springbootauth.dto.response.UserResponse
 import java.util.UUID
 
 interface UserService {

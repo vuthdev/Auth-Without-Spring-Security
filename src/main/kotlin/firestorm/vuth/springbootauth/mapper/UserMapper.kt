@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.mapper
 
-import firestorm.vuth.springbootauth.dto.res.ProfileResponse
-import firestorm.vuth.springbootauth.dto.res.UserResponse
+import firestorm.vuth.springbootauth.dto.response.ProfileResponse
+import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.model.User
 
 fun User.toResponse(): UserResponse =
