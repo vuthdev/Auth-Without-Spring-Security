@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.`request\`.AuthRequest
-import firestorm.vuth.springbootauth.dto.`request\`.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.request.AuthRequest
+import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
 import firestorm.vuth.springbootauth.dto.response.RegisterResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
@@ -29,14 +29,15 @@ class UserServiceImpl(
     private val authContext: AuthContext
 ): UserService {
     override fun login(request: AuthRequest): LoginResponse {
-        val user = userRepo.findByUsername(request.username) ?: throw NotFoundException("username not found")
+        val user = userRepo.findByUsername(request.username)
+            ?: throw NotFoundException("username not found")
 
         if (!passwordEncoder.matches(request.password, user.password)) {
             throw UnauthorizedException("incorrect password")
         }
 
         return LoginResponse(
-            accessToken = jwtService.generateToken(user)
+            accessToken = jwtService.generateAccessToken(user)
         )
     }
 

@@ -1,12 +1,13 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.`request\`.CreatePermissionRequest
+import firestorm.vuth.springbootauth.dto.request.CreatePermissionRequest
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.mapper.toResponse
 import firestorm.vuth.springbootauth.model.Permission
 import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.service.PermissionService
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class PermissionServiceImpl(
@@ -18,6 +19,10 @@ class PermissionServiceImpl(
         )
 
         return permissionRepository.save(permission).toResponse()
+    }
+
+    override fun deleteById(id: UUID) {
+        permissionRepository.deleteById(id)
     }
 
     override fun findAll(): List<PermissionResponse> {

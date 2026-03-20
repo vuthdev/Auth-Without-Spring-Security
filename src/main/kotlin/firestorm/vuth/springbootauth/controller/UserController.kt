@@ -1,8 +1,8 @@
 package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
-import firestorm.vuth.springbootauth.dto.`request\`.AuthRequest
-import firestorm.vuth.springbootauth.dto.`request\`.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.request.AuthRequest
+import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.dto.response.RegisterResponse

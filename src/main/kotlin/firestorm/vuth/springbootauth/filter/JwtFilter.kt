@@ -2,7 +2,6 @@ package firestorm.vuth.springbootauth.filter
 
 import firestorm.vuth.springbootauth.exception.TokenException
 import firestorm.vuth.springbootauth.security.JwtService
-import io.jsonwebtoken.JwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -21,6 +20,7 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+
         if (request.servletPath in whiteList) {
             filterChain.doFilter(request, response)
             return

@@ -1,7 +1,7 @@
 package firestorm.vuth.springbootauth.service.impl
 
-import firestorm.vuth.springbootauth.dto.`request\`.CreateRoleRequest
-import firestorm.vuth.springbootauth.dto.`request\`.UpdateRoleRequest
+import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
+import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.mapper.toResponse
@@ -10,6 +10,7 @@ import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.repository.RoleRepository
 import firestorm.vuth.springbootauth.service.RoleService
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class RoleServiceImpl(
@@ -25,6 +26,10 @@ class RoleServiceImpl(
         role.permissions = permission
 
         return roleRepository.save(role).toResponse()
+    }
+
+    override fun deleteById(id: UUID) {
+        roleRepository.deleteById(id)
     }
 
     override fun findAll(): List<RoleResponse> {

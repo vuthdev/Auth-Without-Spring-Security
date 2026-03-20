@@ -23,10 +23,7 @@ class JwtService(
     @Value("\${jwt.secret}")
     private val secret: String,
 ) {
-    private val log = LoggerFactory.getLogger(JwtService::class.java)
-
-    fun generateToken(user: User): String {
-        log.debug("Generating token for user ${user.username} with role ${user.role?.roleName}")
+    fun generateAccessToken(user: User): String {
 
         return Jwts.builder()
             .subject(user.id.toString())
