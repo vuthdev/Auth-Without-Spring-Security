@@ -12,7 +12,6 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtFilter(
     private val jwtService: JwtService
 ): OncePerRequestFilter() {
-
     private val whiteList = listOf("/user/login", "/user/register")
 
     override fun doFilterInternal(
@@ -20,7 +19,6 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-
         if (request.servletPath in whiteList) {
             filterChain.doFilter(request, response)
             return

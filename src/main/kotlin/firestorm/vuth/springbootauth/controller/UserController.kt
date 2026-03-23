@@ -42,6 +42,7 @@ class UserController(
     }
 
     @GetMapping("/profile")
+    @RequiresPermission("VIEW_PROFILE")
     fun profile(): ResponseEntity<ProfileResponse> {
         return ResponseEntity.ok(userService.viewProfile())
     }

@@ -57,7 +57,7 @@ class UserServiceImpl(
         userRepo.save(user)
         return RegisterResponse(
             success = true,
-            message = "User registered successfully",
+            message = "User registered successfully"
         )
     }
 

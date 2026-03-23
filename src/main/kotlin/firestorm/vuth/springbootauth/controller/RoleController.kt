@@ -1,5 +1,7 @@
 package firestorm.vuth.springbootauth.controller
 
+import firestorm.vuth.springbootauth.annotation.RequiresPermission
+import firestorm.vuth.springbootauth.dto.request.AddPermissionRequest
 import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
 import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
@@ -22,22 +24,39 @@ class RoleController(
     private val roleService: RoleService,
 ) {
     @PostMapping
+    @RequiresPermission("CREATE_ROLE")
     fun createRole(@RequestBody request: CreateRoleRequest): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(request))
     }
 
     @DeleteMapping("/{id}")
+    @RequiresPermission("DELETE_ROLE")
     fun deleteRole(@PathVariable id: UUID): ResponseEntity<Unit> {
         return ResponseEntity.ok(roleService.deleteById(id))
     }
 
     @GetMapping
+    @RequiresPermission("READ_ROLE")
     fun getAll(): ResponseEntity<List<RoleResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.findAll())
     }
 
+    @GetMapping("/{roleName}/permissions")
+    @RequiresPermission("READ_ROLE_PERMISSION")
+    fun getRolePermission(@PathVariable roleName: String): ResponseEntity<RoleResponse> {
+        return ResponseEntity.ok(roleService.getAllRolePermissions(roleName))
+    }
+
+    @PostMapping("/{roleName}/permissions")
+    fun addPermissionToRole(@PathVariable roleName: String, @RequestBody request: AddPermissionRequest): ResponseEntity<RoleResponse> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(roleService.addPermissionToRole(roleName, request))
+    }
+
     @PutMapping
+    @RequiresPermission("UPDATE_ROLE")
     fun updateRole(@RequestBody request: UpdateRoleRequest): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(request))
     }
+
+
 }

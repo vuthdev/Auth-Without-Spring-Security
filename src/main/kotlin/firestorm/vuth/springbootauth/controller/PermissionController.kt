@@ -1,5 +1,6 @@
 package firestorm.vuth.springbootauth.controller
 
+import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.CreatePermissionRequest
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
@@ -20,16 +21,19 @@ class PermissionController(
     private val permissionService: PermissionService
 ) {
     @PostMapping
+    @RequiresPermission("CREATE_PERMISSION")
     fun createPermission(@RequestBody request: CreatePermissionRequest): ResponseEntity<PermissionResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(permissionService.createPermissions(request))
     }
 
     @DeleteMapping("/{id}")
+    @RequiresPermission("DELETE_PERMISSION")
     fun deletePermission(@PathVariable id: UUID): ResponseEntity<Unit> {
         return ResponseEntity.ok(permissionService.deleteById(id))
     }
 
     @GetMapping
+    @RequiresPermission("READ_PERMISSION")
     fun listAllPermissions(): ResponseEntity<List<PermissionResponse>> {
         return ResponseEntity.ok(permissionService.findAll())
     }

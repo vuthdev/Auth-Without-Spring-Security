@@ -1,27 +1,22 @@
 package firestorm.vuth.springbootauth.security
 
-import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.TokenException
-import firestorm.vuth.springbootauth.model.Role
 import firestorm.vuth.springbootauth.model.User
-import firestorm.vuth.springbootauth.repository.RoleRepository
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.Base64
 import java.util.Date
-import java.util.UUID
 import javax.crypto.SecretKey
 
 @Service
 class JwtService(
     @Value("\${jwt.secret}")
-    private val secret: String,
+    private val secret: String
 ) {
     fun generateAccessToken(user: User): String {
 

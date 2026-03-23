@@ -8,6 +8,7 @@ import java.util.UUID
 
 @Repository
 interface PermissionRepository: JpaRepository<Permission, UUID> {
+    fun findByPermissionNameIn(permissionName: Set<String>): List<Permission>?
     fun existsByPermissionNameAndRoles(permissionName: String, roles: Role?): Boolean
     fun existsByPermissionName(permissionName: String): Boolean
 }
