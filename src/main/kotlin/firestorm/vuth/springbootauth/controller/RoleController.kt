@@ -48,6 +48,7 @@ class RoleController(
     }
 
     @PostMapping("/{roleName}/permissions")
+    @RequiresPermission("ADD_PERMISSION")
     fun addPermissionToRole(@PathVariable roleName: String, @RequestBody request: AddPermissionRequest): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.addPermissionToRole(roleName, request))
     }
@@ -57,6 +58,4 @@ class RoleController(
     fun updateRole(@RequestBody request: UpdateRoleRequest): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(request))
     }
-
-
 }
