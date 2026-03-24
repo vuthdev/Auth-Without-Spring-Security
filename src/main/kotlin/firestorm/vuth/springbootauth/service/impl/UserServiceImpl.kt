@@ -67,6 +67,11 @@ class UserServiceImpl(
         return user.toProfileResponse()
     }
 
+    override fun viewUserProfile(username: String): ProfileResponse {
+        val user = userRepo.findByUsername(username) ?: throw NotFoundException("username not found")
+        return user.toProfileResponse()
+    }
+
     override fun createUser(request: CreateUserRequest): UserResponse {
         if (userRepo.existsByUsername(request.username)) {
             throw UnauthorizedException("User already exists")

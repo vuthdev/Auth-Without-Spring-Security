@@ -16,4 +16,8 @@ fun List<User>.toResponse(): List<UserResponse> =
 
 fun User.toProfileResponse(): ProfileResponse = ProfileResponse(
     username = this.username,
+    roleName = this.role?.roleName,
+    permissions = this.role?.permissions?.mapNotNull {
+        it.permissionName
+    } ?: emptyList()
 )

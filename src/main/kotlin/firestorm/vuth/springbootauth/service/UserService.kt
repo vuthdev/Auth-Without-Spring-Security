@@ -14,6 +14,7 @@ interface UserService {
     fun login(request: AuthRequest): LoginResponse
     fun register(request: AuthRequest): RegisterResponse
     fun viewProfile(): ProfileResponse
+    fun viewUserProfile(username: String): ProfileResponse
     fun createUser(request: CreateUserRequest): UserResponse
     fun getAll(): List<UserResponse>
     fun deleteUser(id: UUID)

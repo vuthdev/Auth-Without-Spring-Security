@@ -50,6 +50,11 @@ class UserController(
         return ResponseEntity.ok(userService.viewProfile())
     }
 
+    @GetMapping("/profile/{username}")
+    fun profileOther(@PathVariable username: String): ResponseEntity<ProfileResponse> {
+        return ResponseEntity.ok(userService.viewUserProfile(username))
+    }
+
     @PostMapping("/register")
     fun register(@RequestBody request: AuthRequest): ResponseEntity<RegisterResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request))
