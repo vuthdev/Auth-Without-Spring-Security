@@ -25,7 +25,7 @@ class JwtService(
             .claim("username", user.username)
             .claim("role", user.role?.roleName)
             .issuedAt(Date())
-            .expiration(Date(System.currentTimeMillis() + 600000))
+            .expiration(Date(System.currentTimeMillis() + 600000)) // expire in 10 minutes
             .signWith(getSignKey())
             .compact()
     }

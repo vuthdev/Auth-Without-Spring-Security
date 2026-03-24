@@ -1,6 +1,7 @@
 package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
+import firestorm.vuth.springbootauth.annotation.RequiresRole
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
@@ -52,6 +53,7 @@ class UserController(
 
     @GetMapping("/profile/{username}")
     @RequiresPermission("VIEW_OTHER_PROFILE")
+    @RequiresRole("admin")
     fun profileOther(@PathVariable username: String): ResponseEntity<ProfileResponse> {
         return ResponseEntity.ok(userService.viewUserProfile(username))
     }

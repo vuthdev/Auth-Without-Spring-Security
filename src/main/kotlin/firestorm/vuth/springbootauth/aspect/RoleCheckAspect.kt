@@ -17,7 +17,7 @@ class RoleCheckAspect(
         val principal = authContext.getCurrentUser()
 
         if (principal.role?.roleName !in requiresRole.roles) {
-            throw ForbiddenException("Forbidden: ${requiresRole.roles}")
+            throw ForbiddenException("Forbidden: required role is ${requiresRole.roles.toList()}")
         }
     }
 }
