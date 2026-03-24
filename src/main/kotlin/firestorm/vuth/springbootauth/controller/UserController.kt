@@ -25,7 +25,7 @@ class UserController(
     private val userService: UserService
 ) {
     @PostMapping
-    @RequiresPermission("READ_USERS")
+    @RequiresPermission("CREATE_USERS")
     fun createUser(@RequestBody request: CreateUserRequest): ResponseEntity<UserResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request))
     }

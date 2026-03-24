@@ -51,7 +51,7 @@ class RoleServiceImpl(
 
         if (alreadyAssigned.isNotEmpty()) {
             throw ResponseStatusException(
-                HttpStatus.CONFLICT,
+                HttpStatus.BAD_REQUEST,
                 "Permission already assigned to this role: $alreadyAssigned"
             )
         }
@@ -70,7 +70,7 @@ class RoleServiceImpl(
 
     override fun getAllRolePermissions(roleName: String): RoleResponse {
         val role = roleRepository.findByRoleName(roleName)
-            ?: throw NotFoundException("Role $roleName not found")
+            ?: throw NotFoundException("Role $  roleName not found")
 
         return role.toResponse()
     }

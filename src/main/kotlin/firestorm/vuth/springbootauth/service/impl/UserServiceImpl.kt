@@ -48,14 +48,14 @@ class UserServiceImpl(
 
         val defaultRole = roleRepo.findByRoleName("user") ?: throw NotFoundException("role not found")
 
-        val user = User(
+        val user = User (
             username = request.username,
             password = passwordEncoder.encode(request.password),
             role = defaultRole
         )
 
         userRepo.save(user)
-        return RegisterResponse(
+        return RegisterResponse (
             success = true,
             message = "User registered successfully"
         )

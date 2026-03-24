@@ -1,7 +1,5 @@
 package firestorm.vuth.springbootauth.exception
 
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.JwtException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
