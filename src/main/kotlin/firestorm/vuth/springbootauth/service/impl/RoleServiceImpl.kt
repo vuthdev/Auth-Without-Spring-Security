@@ -2,6 +2,7 @@ package firestorm.vuth.springbootauth.service.impl
 
 import firestorm.vuth.springbootauth.dto.request.AddPermissionRequest
 import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
+import firestorm.vuth.springbootauth.dto.request.RemovePermissionRequest
 import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
@@ -57,6 +58,23 @@ class RoleServiceImpl(
         }
 
         role.permissions += found.toSet()
+        return roleRepository.save(role).toResponse()
+    }
+
+    override fun removePermissionFromRole(
+        roleName: String,
+        request: RemovePermissionRequest
+    ): RoleResponse {
+        val role = roleRepository.findByRoleName(roleName) ?: throw NotFoundException("Role not found with role name $roleName")
+
+        val found = permissionRepository.findByPermissionNameIn(request.permissions)
+        if (found?.size != request.permissions.size) {
+            val foundName = found?.map { it.permissionName?.uppercase() }?.toSet()
+            val invalid = request.permissions - foundName
+            throw NotFoundException("Unknown permission: $invalid")
+        }
+
+        role.permissions -= found.toSet()
         return roleRepository.save(role).toResponse()
     }
 

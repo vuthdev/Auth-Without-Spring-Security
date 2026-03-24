@@ -3,6 +3,7 @@ package firestorm.vuth.springbootauth.controller
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.AddPermissionRequest
 import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
+import firestorm.vuth.springbootauth.dto.request.RemovePermissionRequest
 import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
@@ -57,5 +58,13 @@ class RoleController(
     @RequiresPermission("UPDATE_ROLE")
     fun updateRole(@RequestBody request: UpdateRoleRequest): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(request))
+    }
+
+    @DeleteMapping("/{roleName}/permissions")
+    fun removePermFromRole(
+        @PathVariable roleName: String,
+        @RequestBody request: RemovePermissionRequest
+    ): ResponseEntity<RoleResponse> {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(roleService.removePermissionFromRole(roleName, request))
     }
 }

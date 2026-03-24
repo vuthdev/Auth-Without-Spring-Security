@@ -8,7 +8,7 @@ fun User.toResponse(): UserResponse =
     UserResponse(
         this.id,
         this.username,
-        this.role?.toResponse(),
+        this.role?.roleName,
     )
 
 fun List<User>.toResponse(): List<UserResponse> =

@@ -14,6 +14,7 @@ import firestorm.vuth.springbootauth.repository.UserRepository
 import firestorm.vuth.springbootauth.security.JwtService
 import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.context.AuthContext
+import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.mapper.toProfileResponse
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -88,5 +89,15 @@ class UserServiceImpl(
 
     override fun deleteUser(id: UUID) {
         userRepo.deleteById(id)
+    }
+
+    override fun assignRole(username: String, request: AssignRoleRequest): UserResponse {
+        val user = userRepo.findByUsername(username) ?: throw NotFoundException("username not found")
+
+        request.roleName.let {
+            user.role = roleRepo.findByRoleName(it) ?: throw NotFoundException("role not found")
+        }
+
+        return userRepo.save(user).toResponse()
     }
 }
