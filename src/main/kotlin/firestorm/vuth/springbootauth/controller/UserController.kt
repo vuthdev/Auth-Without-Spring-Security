@@ -53,7 +53,6 @@ class UserController(
 
     @GetMapping("/profile/{username}")
     @RequiresPermission("VIEW_OTHER_PROFILE")
-    @RequiresRole("admin")
     fun profileOther(@PathVariable username: String): ResponseEntity<ProfileResponse> {
         return ResponseEntity.ok(userService.viewUserProfile(username))
     }
