@@ -47,7 +47,8 @@ class UserServiceImpl(
             throw UnauthorizedException("User already exists")
         }
 
-        val defaultRole = roleRepo.findByRoleName("user") ?: throw NotFoundException("role not found")
+        val defaultRole = roleRepo.findByRoleName("user")
+            ?: throw NotFoundException("role not found")
 
         val user = User (
             username = request.username,
@@ -68,7 +69,8 @@ class UserServiceImpl(
     }
 
     override fun viewUserProfile(username: String): ProfileResponse {
-        val user = userRepo.findByUsername(username) ?: throw NotFoundException("username not found")
+        val user = userRepo.findByUsername(username)
+            ?: throw NotFoundException("username not found")
         return user.toProfileResponse()
     }
 
@@ -77,7 +79,8 @@ class UserServiceImpl(
             throw UnauthorizedException("User already exists")
         }
 
-        val role = roleRepo.findByRoleName(request.role) ?: throw NotFoundException("role not found")
+        val role = roleRepo.findByRoleName(request.role)
+            ?: throw NotFoundException("role not found")
 
         val user = User(
             username = request.username,
@@ -97,10 +100,12 @@ class UserServiceImpl(
     }
 
     override fun assignRole(username: String, request: AssignRoleRequest): UserResponse {
-        val user = userRepo.findByUsername(username) ?: throw NotFoundException("username not found")
+        val user = userRepo.findByUsername(username)
+            ?: throw NotFoundException("username not found")
 
         request.roleName.let {
-            user.role = roleRepo.findByRoleName(it) ?: throw NotFoundException("role not found")
+            user.role = roleRepo.findByRoleName(it)
+                ?: throw NotFoundException("role not found")
         }
 
         return userRepo.save(user).toResponse()

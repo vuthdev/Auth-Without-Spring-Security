@@ -65,7 +65,8 @@ class RoleServiceImpl(
         roleName: String,
         request: RemovePermissionRequest
     ): RoleResponse {
-        val role = roleRepository.findByRoleName(roleName) ?: throw NotFoundException("Role not found with role name $roleName")
+        val role = roleRepository.findByRoleName(roleName)
+            ?: throw NotFoundException("Role not found with role name $roleName")
 
         val found = permissionRepository.findByPermissionNameIn(request.permissions)
         if (found?.size != request.permissions.size) {
