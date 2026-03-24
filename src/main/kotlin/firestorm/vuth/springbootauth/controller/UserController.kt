@@ -51,6 +51,7 @@ class UserController(
     }
 
     @GetMapping("/profile/{username}")
+    @RequiresPermission("VIEW_OTHER_PROFILE")
     fun profileOther(@PathVariable username: String): ResponseEntity<ProfileResponse> {
         return ResponseEntity.ok(userService.viewUserProfile(username))
     }

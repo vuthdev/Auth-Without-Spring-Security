@@ -61,6 +61,7 @@ class RoleController(
     }
 
     @DeleteMapping("/{roleName}/permissions")
+    @RequiresPermission("DELETE_PERMISSION")
     fun removePermFromRole(
         @PathVariable roleName: String,
         @RequestBody request: RemovePermissionRequest
