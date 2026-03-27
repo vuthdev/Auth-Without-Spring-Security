@@ -5,15 +5,14 @@ import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
 import firestorm.vuth.springbootauth.dto.request.RemovePermissionRequest
 import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
+import firestorm.vuth.springbootauth.exception.ForbiddenException
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.mapper.toResponse
 import firestorm.vuth.springbootauth.model.Role
 import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.repository.RoleRepository
 import firestorm.vuth.springbootauth.service.RoleService
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @Service
@@ -51,10 +50,7 @@ class RoleServiceImpl(
         val alreadyAssigned = request.permissions.intersect(existingNames)
 
         if (alreadyAssigned.isNotEmpty()) {
-            throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Permission already assigned to this role: $alreadyAssigned"
-            )
+            throw ForbiddenException("Permission already assigned to this role: $alreadyAssigned")
         }
 
         role.permissions += found.toSet()
