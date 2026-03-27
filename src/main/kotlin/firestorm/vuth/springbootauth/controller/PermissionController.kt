@@ -2,8 +2,10 @@ package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.CreatePermissionRequest
+import firestorm.vuth.springbootauth.dto.response.ApiResponse
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
+import firestorm.vuth.springbootauth.utils.ApiSuccess
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -24,19 +26,34 @@ class PermissionController(
     @RequiresPermission("CREATE_PERMISSION")
     fun createPermission(
         @RequestBody request: CreatePermissionRequest
-    ): ResponseEntity<PermissionResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(permissionService.createPermissions(request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        permissionService.createPermissions(request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiSuccess.message(
+                status = HttpStatus.CREATED,
+                message = "Permission created successfully"
+            )
+        )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{permissionId}")
     @RequiresPermission("DELETE_PERMISSION")
-    fun deletePermission(@PathVariable id: UUID): ResponseEntity<Unit> {
-        return ResponseEntity.ok(permissionService.deleteById(id))
+    fun deletePermission(@PathVariable permissionId: UUID): ResponseEntity<ApiResponse<Nothing>> {
+        permissionService.deleteById(permissionId)
+        return ResponseEntity.ok(
+            ApiSuccess.message(
+                message = "Permission deleted successfully",
+            )
+        )
     }
 
     @GetMapping
     @RequiresPermission("READ_PERMISSION")
-    fun listAllPermissions(): ResponseEntity<List<PermissionResponse>> {
-        return ResponseEntity.ok(permissionService.findAll())
+    fun listAllPermissions(): ResponseEntity<ApiResponse<List<PermissionResponse>>> {
+        return ResponseEntity.ok(
+            ApiSuccess.withData(
+                data = permissionService.findAll()
+            )
+        )
     }
 }

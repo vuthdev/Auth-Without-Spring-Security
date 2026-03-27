@@ -1,16 +1,15 @@
 package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
-import firestorm.vuth.springbootauth.annotation.RequiresRole
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.response.ApiResponse
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
-import firestorm.vuth.springbootauth.dto.response.RegisterResponse
-import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.service.UserService
+import firestorm.vuth.springbootauth.utils.ApiSuccess
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -30,50 +29,87 @@ class UserController(
 ) {
     @PostMapping
     @RequiresPermission("CREATE_USERS")
-    fun createUser(@RequestBody request: CreateUserRequest): ResponseEntity<UserResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request))
+    fun createUser(@RequestBody request: CreateUserRequest): ResponseEntity<ApiResponse<Nothing>> {
+        userService.createUser(request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiSuccess.message(
+                message = "Created user successfully"
+            )
+        )
     }
 
     @GetMapping
     @RequiresPermission("READ_USERS")
-    fun findAll(): ResponseEntity<List<UserResponse>> {
-        return ResponseEntity.ok(userService.getAll())
+    fun findAll(): ResponseEntity<ApiResponse<List<UserResponse>>> {
+        return ResponseEntity.ok(
+            ApiSuccess.withData(
+                data = userService.getAll()
+            )
+        )
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: AuthRequest): ResponseEntity<LoginResponse> {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(request))
+    fun login(@RequestBody request: AuthRequest): ResponseEntity<ApiResponse<LoginResponse>> {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ApiSuccess.withData(
+                data = userService.login(request)
+            )
+        )
     }
 
     @GetMapping("/profile")
     @RequiresPermission("VIEW_PROFILE")
-    fun profile(): ResponseEntity<ProfileResponse> {
-        return ResponseEntity.ok(userService.viewProfile())
+    fun profile(): ResponseEntity<ApiResponse<ProfileResponse>> {
+        return ResponseEntity.ok(
+            ApiSuccess.withData(
+                data = userService.viewProfile()
+            )
+        )
     }
 
-    @GetMapping("/profile/{username}")
+    @GetMapping("/profile/{userId}")
     @RequiresPermission("VIEW_OTHER_PROFILE")
-    fun profileOther(@PathVariable username: String): ResponseEntity<ProfileResponse> {
-        return ResponseEntity.ok(userService.viewUserProfile(username))
+    fun profileOther(@PathVariable userId: UUID): ResponseEntity<ApiResponse<ProfileResponse>> {
+        return ResponseEntity.ok(
+            ApiSuccess.withData(
+                data = userService.viewUserProfile(userId)
+            )
+        )
     }
 
     @PostMapping("/register")
-    fun register(@RequestBody request: AuthRequest): ResponseEntity<RegisterResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request))
+    fun register(@RequestBody request: AuthRequest): ResponseEntity<ApiResponse<Nothing>> {
+        userService.register(request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiSuccess.message(
+                status = HttpStatus.CREATED,
+                message = "Registration successful"
+            )
+        )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     @RequiresPermission("DELETE_USERS")
-    fun deleteUser(@PathVariable id: UUID): ResponseEntity<Unit> {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteUser(id))
+    fun deleteUser(@PathVariable userId: UUID): ResponseEntity<ApiResponse<Nothing>> {
+        userService.deleteUser(userId)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+            ApiSuccess.message(
+                message = "User deleted successfully"
+            )
+        )
     }
 
-    @PutMapping("/{username}/roles")
+    @PutMapping("/{userId}/roles")
     @RequiresPermission("ASSIGN_ROLE")
     fun assignRole(
-        @PathVariable username: String,
+        @PathVariable userId: UUID,
         @RequestBody request: AssignRoleRequest
-    ): ResponseEntity<UserResponse> {
-        return ResponseEntity.ok(userService.assignRole(username, request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        userService.assignRole(userId, request)
+        return ResponseEntity.ok(
+            ApiSuccess.message(
+                message = "Role assigned successfully"
+            )
+        )
     }
 }

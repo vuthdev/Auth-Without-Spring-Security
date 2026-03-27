@@ -13,19 +13,17 @@ import java.util.UUID
 class PermissionServiceImpl(
     private val permissionRepository: PermissionRepository
 ): PermissionService {
-    override fun createPermissions(request: CreatePermissionRequest): PermissionResponse {
+    override fun createPermissions(request: CreatePermissionRequest) {
         val permission = Permission(
             permissionName = request.permissionName
         )
 
-        return permissionRepository.save(permission).toResponse()
+        permissionRepository.save(permission)
     }
 
-    override fun deleteById(id: UUID) {
+    override fun deleteById(id: UUID) =
         permissionRepository.deleteById(id)
-    }
 
-    override fun findAll(): List<PermissionResponse> {
-        return permissionRepository.findAll().toResponse()
-    }
+    override fun findAll(): List<PermissionResponse> =
+        permissionRepository.findAll().toResponse()
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.Base64
 import java.util.Date
+import java.util.UUID
 import javax.crypto.SecretKey
 
 @Service
@@ -30,13 +31,8 @@ class JwtService(
             .compact()
     }
 
-    fun getUsernameFromToken(token: String): String? {
-        return parseClaims(token).get("username", String::class.java)
-    }
-
-    fun isTokenExpired(token: String): Boolean {
-        val claims = parseClaims(token)
-        return claims.expiration.before(Date())
+    fun getUserIdFromToken(token: String): UUID {
+        return UUID.fromString(parseClaims(token).subject)
     }
 
     fun parseClaims(token: String): Claims =
@@ -47,9 +43,9 @@ class JwtService(
                 .parseSignedClaims(token)
                 .payload
         } catch (e: ExpiredJwtException) {
-            throw TokenException("Token has expired.")
+            throw TokenException("Token expired")
         } catch (e: JwtException) {
-            throw TokenException("Token is invalid.")
+            throw TokenException("Token is invalid")
         }
 
     fun getSignKey(): SecretKey {

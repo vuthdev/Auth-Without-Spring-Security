@@ -8,11 +8,11 @@ import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import java.util.UUID
 
 interface RoleService {
-    fun createRole(request: CreateRoleRequest): RoleResponse
-    fun addPermissionToRole(roleName: String, request: AddPermissionRequest): RoleResponse
-    fun removePermissionFromRole(roleName: String, request: RemovePermissionRequest): RoleResponse
+    fun createRole(request: CreateRoleRequest)
+    fun addPermissionToRole(id: UUID, request: AddPermissionRequest)
+    fun removePermissionFromRole(id: UUID, request: RemovePermissionRequest)
     fun deleteById(id: UUID)
     fun findAll(): List<RoleResponse>
-    fun getAllRolePermissions(roleName: String): RoleResponse
-    fun updateRole(request: UpdateRoleRequest): RoleResponse
+    fun getAllRolePermissions(id: UUID): RoleResponse
+    fun updateRole(request: UpdateRoleRequest)
 }

@@ -3,7 +3,6 @@ package firestorm.vuth.springbootauth.service.impl
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
-import firestorm.vuth.springbootauth.dto.response.RegisterResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.UnauthorizedException
@@ -42,7 +41,7 @@ class UserServiceImpl(
         )
     }
 
-    override fun register(request: AuthRequest): RegisterResponse {
+    override fun register(request: AuthRequest) {
         if (userRepo.existsByUsername(request.username)) {
             throw UnauthorizedException("User already exists")
         }
@@ -57,10 +56,6 @@ class UserServiceImpl(
         )
 
         userRepo.save(user)
-        return RegisterResponse (
-            success = true,
-            message = "User registered successfully"
-        )
     }
 
     override fun viewProfile(): ProfileResponse {
@@ -68,13 +63,13 @@ class UserServiceImpl(
         return user.toProfileResponse()
     }
 
-    override fun viewUserProfile(username: String): ProfileResponse {
-        val user = userRepo.findByUsername(username)
-            ?: throw NotFoundException("username not found")
+    override fun viewUserProfile(userId: UUID): ProfileResponse {
+        val user = userRepo.findById(userId)
+            .orElseThrow { NotFoundException("user not found") }
         return user.toProfileResponse()
     }
 
-    override fun createUser(request: CreateUserRequest): UserResponse {
+    override fun createUser(request: CreateUserRequest) {
         if (userRepo.existsByUsername(request.username)) {
             throw UnauthorizedException("User already exists")
         }
@@ -88,26 +83,24 @@ class UserServiceImpl(
             role = role
         )
 
-        return userRepo.save(user).toResponse()
+        userRepo.save(user)
     }
 
-    override fun getAll(): List<UserResponse> {
-        return userRepo.findAll().toResponse()
-    }
+    override fun getAll(): List<UserResponse> =
+        userRepo.findAll().toResponse()
 
-    override fun deleteUser(id: UUID) {
+    override fun deleteUser(id: UUID) =
         userRepo.deleteById(id)
-    }
 
-    override fun assignRole(username: String, request: AssignRoleRequest): UserResponse {
-        val user = userRepo.findByUsername(username)
-            ?: throw NotFoundException("username not found")
+    override fun assignRole(userId: UUID, request: AssignRoleRequest) {
+        val user = userRepo.findById(userId)
+            .orElseThrow { NotFoundException("user not found") }
 
         request.roleName.let {
             user.role = roleRepo.findByRoleName(it)
                 ?: throw NotFoundException("role not found")
         }
 
-        return userRepo.save(user).toResponse()
+        userRepo.save(user)
     }
 }

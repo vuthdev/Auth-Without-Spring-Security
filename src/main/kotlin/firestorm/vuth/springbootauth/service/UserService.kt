@@ -5,18 +5,16 @@ import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
-import firestorm.vuth.springbootauth.dto.response.RegisterResponse
-import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import java.util.UUID
 
 interface UserService {
     fun login(request: AuthRequest): LoginResponse
-    fun register(request: AuthRequest): RegisterResponse
+    fun register(request: AuthRequest)
     fun viewProfile(): ProfileResponse
-    fun viewUserProfile(username: String): ProfileResponse
-    fun createUser(request: CreateUserRequest): UserResponse
+    fun viewUserProfile(userId: UUID): ProfileResponse
+    fun createUser(request: CreateUserRequest)
     fun getAll(): List<UserResponse>
     fun deleteUser(id: UUID)
-    fun assignRole(username: String, request: AssignRoleRequest): UserResponse
+    fun assignRole(userId: UUID, request: AssignRoleRequest)
 }

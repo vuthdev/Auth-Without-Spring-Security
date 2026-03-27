@@ -5,8 +5,10 @@ import firestorm.vuth.springbootauth.dto.request.AddPermissionRequest
 import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
 import firestorm.vuth.springbootauth.dto.request.RemovePermissionRequest
 import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
+import firestorm.vuth.springbootauth.dto.response.ApiResponse
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
+import firestorm.vuth.springbootauth.utils.ApiSuccess
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,53 +30,87 @@ class RoleController(
     @RequiresPermission("CREATE_ROLE")
     fun createRole(
         @RequestBody request: CreateRoleRequest
-    ): ResponseEntity<RoleResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        roleService.createRole(request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiSuccess.message(
+                status = HttpStatus.CREATED,
+                message = "Role created successfully"
+            )
+        )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{roleId}")
     @RequiresPermission("DELETE_ROLE")
     fun deleteRole(
-        @PathVariable id: UUID
-    ): ResponseEntity<Unit> {
-        return ResponseEntity.ok(roleService.deleteById(id))
+        @PathVariable roleId: UUID
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        roleService.deleteById(roleId)
+        return ResponseEntity.ok(
+            ApiSuccess.message(
+                message = "Role deleted successfully",
+            )
+        )
     }
 
     @GetMapping
     @RequiresPermission("READ_ROLE")
-    fun getAll(): ResponseEntity<List<RoleResponse>> {
-        return ResponseEntity.status(HttpStatus.OK).body(roleService.findAll())
+    fun getAll(): ResponseEntity<ApiResponse<List<RoleResponse>>> {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ApiSuccess.withData(data = roleService.findAll())
+        )
     }
 
-    @GetMapping("/{roleName}/permissions")
+    @GetMapping("/{roleId}/permissions")
     @RequiresPermission("READ_ROLE_PERMISSION")
-    fun getRolePermission(@PathVariable roleName: String): ResponseEntity<RoleResponse> {
-        return ResponseEntity.ok(roleService.getAllRolePermissions(roleName))
+    fun getRolePermission(@PathVariable roleId: UUID): ResponseEntity<ApiResponse<RoleResponse>> {
+        return ResponseEntity.ok(
+            ApiSuccess.withData(
+                data = roleService.getAllRolePermissions(roleId)
+            )
+        )
     }
 
-    @PostMapping("/{roleName}/permissions")
+    @PostMapping("/{roleId}/permissions")
     @RequiresPermission("ADD_PERMISSION")
     fun addPermissionToRole(
-        @PathVariable roleName: String,
+        @PathVariable roleId: UUID,
         @RequestBody request: AddPermissionRequest
-    ): ResponseEntity<RoleResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(roleService.addPermissionToRole(roleName, request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        roleService.addPermissionToRole(roleId, request)
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            ApiSuccess.message(
+                status = HttpStatus.CREATED,
+                message = "Added permission successfully"
+            )
+        )
     }
 
     @PutMapping
     @RequiresPermission("UPDATE_ROLE")
     fun updateRole(
         @RequestBody request: UpdateRoleRequest
-    ): ResponseEntity<RoleResponse> {
-        return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        roleService.updateRole(request)
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ApiSuccess.message(
+                message = "Role updated successfully"
+            )
+        )
     }
 
-    @DeleteMapping("/{roleName}/permissions")
+    @DeleteMapping("/{roleId}/permissions")
     @RequiresPermission("DELETE_PERMISSION")
     fun removePermFromRole(
-        @PathVariable roleName: String,
+        @PathVariable roleId: UUID,
         @RequestBody request: RemovePermissionRequest
-    ): ResponseEntity<RoleResponse> {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(roleService.removePermissionFromRole(roleName, request))
+    ): ResponseEntity<ApiResponse<Nothing>> {
+        roleService.removePermissionFromRole(roleId, request)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+            ApiSuccess.message(
+                status = HttpStatus.NO_CONTENT,
+                message = "Role removed successfully"
+            )
+        )
     }
 }

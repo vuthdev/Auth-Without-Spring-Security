@@ -5,6 +5,7 @@ import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.model.Role
 
 fun Role.toResponse(): RoleResponse = RoleResponse(
+    roleId = this.id.toString(),
     roleName = this.roleName,
     permissions = this.permissions.map { PermissionResponse(it.id, it.permissionName) }
 )

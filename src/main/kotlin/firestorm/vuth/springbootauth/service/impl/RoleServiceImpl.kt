@@ -21,7 +21,7 @@ class RoleServiceImpl(
     private val roleRepository: RoleRepository,
     private val permissionRepository: PermissionRepository
 ): RoleService {
-    override fun createRole(request: CreateRoleRequest): RoleResponse {
+    override fun createRole(request: CreateRoleRequest) {
         val permission = permissionRepository.findAllById(request.permission).toHashSet()
 
         val role = Role(
@@ -29,15 +29,15 @@ class RoleServiceImpl(
         )
         role.permissions = permission
 
-        return roleRepository.save(role).toResponse()
+        roleRepository.save(role)
     }
 
     override fun addPermissionToRole(
-        roleName: String,
+        id: UUID,
         request: AddPermissionRequest
-    ): RoleResponse {
-        val role = roleRepository.findByRoleName(roleName)
-            ?: throw NotFoundException("Role not found with role name $roleName")
+    ) {
+        val role = roleRepository.findById(id)
+            .orElseThrow { NotFoundException("Not found with id $id") }
 
         val found = permissionRepository.findByPermissionNameIn(request.permissions)
 
@@ -58,15 +58,15 @@ class RoleServiceImpl(
         }
 
         role.permissions += found.toSet()
-        return roleRepository.save(role).toResponse()
+        roleRepository.save(role)
     }
 
     override fun removePermissionFromRole(
-        roleName: String,
+        id: UUID,
         request: RemovePermissionRequest
-    ): RoleResponse {
-        val role = roleRepository.findByRoleName(roleName)
-            ?: throw NotFoundException("Role not found with role name $roleName")
+    ) {
+        val role = roleRepository.findById(id)
+            .orElseThrow { NotFoundException("Not found with id $id") }
 
         val found = permissionRepository.findByPermissionNameIn(request.permissions)
         if (found?.size != request.permissions.size) {
@@ -76,7 +76,7 @@ class RoleServiceImpl(
         }
 
         role.permissions -= found.toSet()
-        return roleRepository.save(role).toResponse()
+        roleRepository.save(role)
     }
 
     override fun deleteById(id: UUID) {
@@ -87,14 +87,14 @@ class RoleServiceImpl(
         return roleRepository.findAll().toResponse()
     }
 
-    override fun getAllRolePermissions(roleName: String): RoleResponse {
-        val role = roleRepository.findByRoleName(roleName)
-            ?: throw NotFoundException("Role $roleName not found")
+    override fun getAllRolePermissions(id: UUID): RoleResponse {
+        val role = roleRepository.findById(id)
+            .orElseThrow { NotFoundException("Not found with id $id") }
 
         return role.toResponse()
     }
 
-    override fun updateRole(request: UpdateRoleRequest): RoleResponse {
+    override fun updateRole(request: UpdateRoleRequest) {
         val role = roleRepository.findByRoleName(request.roleName)
             ?: throw NotFoundException("Role ${request.roleName} not found")
 
@@ -103,6 +103,6 @@ class RoleServiceImpl(
             role.permissions = permissionRepository.findAllById(it).toHashSet()
         }
 
-        return roleRepository.save(role).toResponse()
+        roleRepository.save(role)
     }
 }
