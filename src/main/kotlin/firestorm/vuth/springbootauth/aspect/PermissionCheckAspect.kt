@@ -18,8 +18,8 @@ class PermissionCheckAspect(
     fun checkPermission(requirePermission: RequiresPermission) {
         val user = authContext.getCurrentUser()
 
-        val hasPermission = requirePermission.permission.any { permission ->
-            permissionRepository.existsByPermissionNameAndRoles(permission, user.role)
+        val hasPermission = requirePermission.permission.any {
+            permissionRepository.existsByPermissionNameAndRoles(it, user.role)
         }
 
         if (!hasPermission) {

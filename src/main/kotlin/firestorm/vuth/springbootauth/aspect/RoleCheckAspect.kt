@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class RoleCheckAspect(
     private val authContext: AuthContext
-){
+) {
     @Before("@annotation(requiresRole)")
     fun checkRole(requiresRole: RequiresRole) {
         val principal = authContext.getCurrentUser()

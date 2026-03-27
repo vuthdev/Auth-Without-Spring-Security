@@ -22,4 +22,8 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     fun handleForbiddenException(e: ForbiddenException) = mapOf("error" to e.message)
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handOtherException(e: Exception) = mapOf("error" to e.message)
 }

@@ -89,7 +89,7 @@ class RoleServiceImpl(
 
     override fun getAllRolePermissions(roleName: String): RoleResponse {
         val role = roleRepository.findByRoleName(roleName)
-            ?: throw NotFoundException("Role $  roleName not found")
+            ?: throw NotFoundException("Role $roleName not found")
 
         return role.toResponse()
     }

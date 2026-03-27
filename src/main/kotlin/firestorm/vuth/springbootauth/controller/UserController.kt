@@ -70,7 +70,10 @@ class UserController(
 
     @PutMapping("/{username}/roles")
     @RequiresPermission("ASSIGN_ROLE")
-    fun assignRole(@PathVariable username: String, @RequestBody request: AssignRoleRequest): ResponseEntity<UserResponse> {
+    fun assignRole(
+        @PathVariable username: String,
+        @RequestBody request: AssignRoleRequest
+    ): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.assignRole(username, request))
     }
 }

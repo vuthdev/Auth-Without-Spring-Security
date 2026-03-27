@@ -26,13 +26,17 @@ class RoleController(
 ) {
     @PostMapping
     @RequiresPermission("CREATE_ROLE")
-    fun createRole(@RequestBody request: CreateRoleRequest): ResponseEntity<RoleResponse> {
+    fun createRole(
+        @RequestBody request: CreateRoleRequest
+    ): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(request))
     }
 
     @DeleteMapping("/{id}")
     @RequiresPermission("DELETE_ROLE")
-    fun deleteRole(@PathVariable id: UUID): ResponseEntity<Unit> {
+    fun deleteRole(
+        @PathVariable id: UUID
+    ): ResponseEntity<Unit> {
         return ResponseEntity.ok(roleService.deleteById(id))
     }
 
@@ -50,13 +54,18 @@ class RoleController(
 
     @PostMapping("/{roleName}/permissions")
     @RequiresPermission("ADD_PERMISSION")
-    fun addPermissionToRole(@PathVariable roleName: String, @RequestBody request: AddPermissionRequest): ResponseEntity<RoleResponse> {
+    fun addPermissionToRole(
+        @PathVariable roleName: String,
+        @RequestBody request: AddPermissionRequest
+    ): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.addPermissionToRole(roleName, request))
     }
 
     @PutMapping
     @RequiresPermission("UPDATE_ROLE")
-    fun updateRole(@RequestBody request: UpdateRoleRequest): ResponseEntity<RoleResponse> {
+    fun updateRole(
+        @RequestBody request: UpdateRoleRequest
+    ): ResponseEntity<RoleResponse> {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(request))
     }
 

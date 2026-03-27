@@ -22,7 +22,9 @@ class PermissionController(
 ) {
     @PostMapping
     @RequiresPermission("CREATE_PERMISSION")
-    fun createPermission(@RequestBody request: CreatePermissionRequest): ResponseEntity<PermissionResponse> {
+    fun createPermission(
+        @RequestBody request: CreatePermissionRequest
+    ): ResponseEntity<PermissionResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(permissionService.createPermissions(request))
     }
 
