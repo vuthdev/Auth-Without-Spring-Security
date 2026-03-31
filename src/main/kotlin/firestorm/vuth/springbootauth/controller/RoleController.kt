@@ -10,6 +10,7 @@ import firestorm.vuth.springbootauth.dto.response.ApiResponse
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -30,7 +31,7 @@ class RoleController(
     @PostMapping
     @RequiresPermission("CREATE_ROLE")
     fun createRole(
-        @RequestBody request: CreateRoleRequest
+        @Valid @RequestBody request: CreateRoleRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         roleService.createRole(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -78,7 +79,7 @@ class RoleController(
     @RequiresRole("admin")
     fun addPermissionToRole(
         @PathVariable roleId: UUID,
-        @RequestBody request: AddPermissionRequest
+        @Valid @RequestBody request: AddPermissionRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         roleService.addPermissionToRole(roleId, request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -92,7 +93,7 @@ class RoleController(
     @PutMapping
     @RequiresPermission("UPDATE_ROLE")
     fun updateRole(
-        @RequestBody request: UpdateRoleRequest
+        @Valid @RequestBody request: UpdateRoleRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         roleService.updateRole(request)
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -106,7 +107,7 @@ class RoleController(
     @RequiresPermission("DELETE_PERMISSION")
     fun removePermFromRole(
         @PathVariable roleId: UUID,
-        @RequestBody request: RemovePermissionRequest
+        @Valid @RequestBody request: RemovePermissionRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         roleService.removePermissionFromRole(roleId, request)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(

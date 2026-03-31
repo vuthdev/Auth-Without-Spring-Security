@@ -103,8 +103,7 @@ class UserServiceImpl(
         userRepo.deleteById(id)
 
     override fun assignRole(userId: UUID, request: AssignRoleRequest) {
-        val user = userRepo.findById(userId)
-            .orElseThrow { NotFoundException("user not found") }
+        val user = userRepo.findById(userId).orElseThrow { NotFoundException("user not found") }
 
         request.roleName.let {
             user.role = roleRepo.findByRoleName(it)

@@ -1,6 +1,8 @@
 package firestorm.vuth.springbootauth.filter
 
+import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.TokenException
+import firestorm.vuth.springbootauth.repository.UserRepository
 import firestorm.vuth.springbootauth.security.JwtService
 import firestorm.vuth.springbootauth.utils.ApiError
 import jakarta.servlet.FilterChain
@@ -10,13 +12,19 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import tools.jackson.databind.ObjectMapper
+import java.util.UUID
 
 @Component
 class JwtFilter(
     private val jwtService: JwtService,
+    private val userRepository: UserRepository,
     private val objectMapper: ObjectMapper
 ): OncePerRequestFilter() {
     private val whiteList = listOf("/user/login", "/user/register")
+
+    companion object {
+        const val CURRENT_USER = "currentUser"
+    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -36,7 +44,10 @@ class JwtFilter(
         }
 
         try {
-            jwtService.parseClaims(token.removePrefix("Bearer "))
+            val claims = jwtService.parseClaims(token.removePrefix("Bearer "))
+            val userId = UUID.fromString(claims.subject)
+            val user = userRepository.findByIdWithRole(userId) ?: throw NotFoundException("user $userId not found")
+            request.setAttribute(CURRENT_USER, user)
         } catch (e: TokenException) {
             writeError(response, e.message ?: "Invalid token")
             return

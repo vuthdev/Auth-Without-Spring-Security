@@ -6,6 +6,7 @@ import firestorm.vuth.springbootauth.dto.response.ApiResponse
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -25,7 +26,7 @@ class PermissionController(
     @PostMapping
     @RequiresPermission("CREATE_PERMISSION")
     fun createPermission(
-        @RequestBody request: CreatePermissionRequest
+        @Valid @RequestBody request: CreatePermissionRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         permissionService.createPermissions(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
