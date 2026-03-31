@@ -24,9 +24,4 @@ class AuthContext(
         val userId = jwtService.getUserIdFromToken(getToken())
         return userRepository.findById(userId).orElseThrow { NotFoundException("user not found") }
     }
-
-    fun isAuthenticated(): Boolean {
-        val userId = jwtService.getUserIdFromToken(getToken())
-        return userRepository.findById(userId) != null
-    }
 }

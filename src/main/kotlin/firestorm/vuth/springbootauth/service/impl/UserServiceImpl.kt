@@ -16,6 +16,7 @@ import firestorm.vuth.springbootauth.context.AuthContext
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.mapper.toProfileResponse
+import firestorm.vuth.springbootauth.utils.LogUtil
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -60,13 +61,19 @@ class UserServiceImpl(
 
     override fun viewProfile(): ProfileResponse {
         val user = authContext.getCurrentUser()
+
+        LogUtil.logJson("${user.username} viewed profile", user.toProfileResponse())
         return user.toProfileResponse()
     }
 
     override fun viewUserProfile(userId: UUID): ProfileResponse {
-        val user = userRepo.findById(userId)
+        val target = userRepo.findById(userId)
             .orElseThrow { NotFoundException("user not found") }
-        return user.toProfileResponse()
+        val viewer = authContext.getCurrentUser()
+        val targetProfile = target.toProfileResponse()
+
+        LogUtil.logJson("${viewer.username} viewed ${target.username}'s profile", targetProfile)
+        return targetProfile
     }
 
     override fun createUser(request: CreateUserRequest) {
@@ -86,8 +93,11 @@ class UserServiceImpl(
         userRepo.save(user)
     }
 
-    override fun getAll(): List<UserResponse> =
-        userRepo.findAll().toResponse()
+    override fun getAll(): List<UserResponse> {
+        val users = userRepo.findAll().toResponse()
+        LogUtil.logJson("${userRepo.count()} users found", users)
+        return users
+    }
 
     override fun deleteUser(id: UUID) =
         userRepo.deleteById(id)

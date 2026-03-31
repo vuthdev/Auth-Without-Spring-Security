@@ -1,6 +1,7 @@
 package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
+import firestorm.vuth.springbootauth.annotation.RequiresRole
 import firestorm.vuth.springbootauth.dto.request.AddPermissionRequest
 import firestorm.vuth.springbootauth.dto.request.CreateRoleRequest
 import firestorm.vuth.springbootauth.dto.request.RemovePermissionRequest
@@ -73,6 +74,7 @@ class RoleController(
 
     @PostMapping("/{roleId}/permissions")
     @RequiresPermission("ADD_PERMISSION")
+    @RequiresRole("admin")
     fun addPermissionToRole(
         @PathVariable roleId: UUID,
         @RequestBody request: AddPermissionRequest

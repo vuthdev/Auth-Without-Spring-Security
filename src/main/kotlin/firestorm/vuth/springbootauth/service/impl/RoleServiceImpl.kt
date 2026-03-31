@@ -12,6 +12,7 @@ import firestorm.vuth.springbootauth.model.Role
 import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.repository.RoleRepository
 import firestorm.vuth.springbootauth.service.RoleService
+import firestorm.vuth.springbootauth.utils.LogUtil
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -80,14 +81,19 @@ class RoleServiceImpl(
     }
 
     override fun findAll(): List<RoleResponse> {
-        return roleRepository.findAll().toResponse()
+        val roleList = roleRepository.findAll().toResponse()
+
+        LogUtil.logJson("Retrieved ${roleList.size} roles", roleList)
+        return roleList
     }
 
     override fun getAllRolePermissions(id: UUID): RoleResponse {
         val role = roleRepository.findById(id)
             .orElseThrow { NotFoundException("Not found with id $id") }
+        val roleList = role.toResponse()
 
-        return role.toResponse()
+        LogUtil.logJson("${role.permissions.size} permissions found", roleList)
+        return roleList
     }
 
     override fun updateRole(request: UpdateRoleRequest) {
