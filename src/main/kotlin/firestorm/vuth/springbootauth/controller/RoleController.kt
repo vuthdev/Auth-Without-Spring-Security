@@ -67,7 +67,8 @@ class RoleController(
     fun getRolePermission(@PathVariable roleId: UUID): ResponseEntity<ApiResponse<RoleResponse>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
-                data = roleService.getAllRolePermissions(roleId)
+                data = roleService.getAllRolePermissions(roleId),
+                message = "Role permissions successfully retrieved"
             )
         )
     }

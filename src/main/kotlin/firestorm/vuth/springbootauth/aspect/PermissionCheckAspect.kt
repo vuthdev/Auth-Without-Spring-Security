@@ -18,9 +18,11 @@ class PermissionCheckAspect(
     fun checkPermission(requirePermission: RequiresPermission) {
         val user = authContext.getCurrentUser()
 
-        val hasPermission = requirePermission.permission.any {
-            permissionRepository.existsByPermissionNameAndRoles(it, user.role)
-        }
+        // check if it exists then return 1 if it not return 0
+        val hasPermission = permissionRepository.existsByPermissionAndRole(
+            requirePermission.permission.toList(),
+            user.role?.id
+        ) == 1
 
         if (!hasPermission) {
             throw ForbiddenException("Forbidden: User role ${user.role?.roleName} doesn't have ${requirePermission.permission.toList()} permission!")

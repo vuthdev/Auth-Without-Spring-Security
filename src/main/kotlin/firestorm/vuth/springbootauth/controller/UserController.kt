@@ -43,7 +43,8 @@ class UserController(
     fun findAll(): ResponseEntity<ApiResponse<List<UserResponse>>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
-                data = userService.getAll()
+                data = userService.getAll(),
+                message = "Users retrieved successfully"
             )
         )
     }
@@ -52,7 +53,8 @@ class UserController(
     fun login(@RequestBody request: AuthRequest): ResponseEntity<ApiResponse<LoginResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(
             ApiSuccess.withData(
-                data = userService.login(request)
+                data = userService.login(request),
+                message = "Login successful"
             )
         )
     }
@@ -62,7 +64,8 @@ class UserController(
     fun profile(): ResponseEntity<ApiResponse<ProfileResponse>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
-                data = userService.viewProfile()
+                data = userService.viewProfile(),
+                message = "Profile retrieved successfully"
             )
         )
     }
@@ -72,7 +75,8 @@ class UserController(
     fun profileOther(@PathVariable userId: UUID): ResponseEntity<ApiResponse<ProfileResponse>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
-                data = userService.viewUserProfile(userId)
+                data = userService.viewUserProfile(userId),
+                message = "Profile retrieved successfully"
             )
         )
     }
