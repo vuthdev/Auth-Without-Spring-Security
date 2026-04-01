@@ -4,7 +4,7 @@ import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
-import firestorm.vuth.springbootauth.dto.response.ApiResponse
+import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import firestorm.vuth.springbootauth.dto.response.LoginResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
@@ -30,7 +30,7 @@ class UserController(
 ) {
     @PostMapping
     @RequiresPermission("CREATE_USERS")
-    fun createUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<ApiResponse<Nothing>> {
+    fun createUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<BaseResponse<Nothing>> {
         userService.createUser(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiSuccess.message(
@@ -41,7 +41,7 @@ class UserController(
 
     @GetMapping
     @RequiresPermission("READ_USERS")
-    fun findAll(): ResponseEntity<ApiResponse<List<UserResponse>>> {
+    fun findAll(): ResponseEntity<BaseResponse<List<UserResponse>>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = userService.getAll(),
@@ -51,7 +51,7 @@ class UserController(
     }
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<ApiResponse<LoginResponse>> {
+    fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<LoginResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(
             ApiSuccess.withData(
                 data = userService.login(request),
@@ -62,7 +62,7 @@ class UserController(
 
     @GetMapping("/profile")
     @RequiresPermission("VIEW_PROFILE")
-    fun profile(): ResponseEntity<ApiResponse<ProfileResponse>> {
+    fun profile(): ResponseEntity<BaseResponse<ProfileResponse>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = userService.viewProfile(),
@@ -73,7 +73,7 @@ class UserController(
 
     @GetMapping("/profile/{userId}")
     @RequiresPermission("VIEW_OTHER_PROFILE")
-    fun profileOther(@PathVariable userId: UUID): ResponseEntity<ApiResponse<ProfileResponse>> {
+    fun profileOther(@PathVariable userId: UUID): ResponseEntity<BaseResponse<ProfileResponse>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = userService.viewUserProfile(userId),
@@ -83,7 +83,7 @@ class UserController(
     }
 
     @PostMapping("/register")
-    fun register(@Valid @RequestBody request: AuthRequest): ResponseEntity<ApiResponse<Nothing>> {
+    fun register(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<Nothing>> {
         userService.register(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiSuccess.message(
@@ -95,7 +95,7 @@ class UserController(
 
     @DeleteMapping("/{userId}")
     @RequiresPermission("DELETE_USERS")
-    fun deleteUser(@PathVariable userId: UUID): ResponseEntity<ApiResponse<Nothing>> {
+    fun deleteUser(@PathVariable userId: UUID): ResponseEntity<BaseResponse<Nothing>> {
         userService.deleteUser(userId)
         return ResponseEntity.ok(
             ApiSuccess.message(
@@ -109,7 +109,7 @@ class UserController(
     fun assignRole(
         @PathVariable userId: UUID,
         @Valid @RequestBody request: AssignRoleRequest
-    ): ResponseEntity<ApiResponse<Nothing>> {
+    ): ResponseEntity<BaseResponse<Nothing>> {
         userService.assignRole(userId, request)
         return ResponseEntity.ok(
             ApiSuccess.message(

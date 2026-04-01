@@ -2,7 +2,7 @@ package firestorm.vuth.springbootauth.controller
 
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.CreatePermissionRequest
-import firestorm.vuth.springbootauth.dto.response.ApiResponse
+import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
@@ -27,7 +27,7 @@ class PermissionController(
     @RequiresPermission("CREATE_PERMISSION")
     fun createPermission(
         @Valid @RequestBody request: CreatePermissionRequest
-    ): ResponseEntity<ApiResponse<Nothing>> {
+    ): ResponseEntity<BaseResponse<Nothing>> {
         permissionService.createPermissions(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiSuccess.message(
@@ -39,7 +39,7 @@ class PermissionController(
 
     @DeleteMapping("/{permissionId}")
     @RequiresPermission("DELETE_PERMISSION")
-    fun deletePermission(@PathVariable permissionId: UUID): ResponseEntity<ApiResponse<Nothing>> {
+    fun deletePermission(@PathVariable permissionId: UUID): ResponseEntity<BaseResponse<Nothing>> {
         permissionService.deleteById(permissionId)
         return ResponseEntity.ok(
             ApiSuccess.message(
@@ -50,7 +50,7 @@ class PermissionController(
 
     @GetMapping
     @RequiresPermission("READ_PERMISSION")
-    fun listAllPermissions(): ResponseEntity<ApiResponse<List<PermissionResponse>>> {
+    fun listAllPermissions(): ResponseEntity<BaseResponse<List<PermissionResponse>>> {
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = permissionService.findAll(),

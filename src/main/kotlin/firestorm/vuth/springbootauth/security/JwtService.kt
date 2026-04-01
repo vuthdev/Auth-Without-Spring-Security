@@ -16,7 +16,7 @@ import javax.crypto.SecretKey
 
 @Service
 class JwtService(
-    @Value("\${jwt.secret}")
+    @Value($$"${jwt.secret}")
     private val secret: String
 ) {
     fun generateAccessToken(user: User): String {
