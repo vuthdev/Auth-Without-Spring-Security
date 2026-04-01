@@ -50,7 +50,7 @@ class RoleController(
         roleService.deleteById(roleId)
         return ResponseEntity.ok(
             ApiSuccess.message(
-                message = "Role deleted successfully",
+                message = "Role deleted successfully"
             )
         )
     }
@@ -59,7 +59,10 @@ class RoleController(
     @RequiresPermission("READ_ROLE")
     fun getAll(): ResponseEntity<ApiResponse<List<RoleResponse>>> {
         return ResponseEntity.status(HttpStatus.OK).body(
-            ApiSuccess.withData(data = roleService.findAll())
+            ApiSuccess.withData(
+                data = roleService.findAll(),
+                message = "Role retrieved successfully"
+            )
         )
     }
 
@@ -110,9 +113,8 @@ class RoleController(
         @Valid @RequestBody request: RemovePermissionRequest
     ): ResponseEntity<ApiResponse<Nothing>> {
         roleService.removePermissionFromRole(roleId, request)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+        return ResponseEntity.ok(
             ApiSuccess.message(
-                status = HttpStatus.NO_CONTENT,
                 message = "Role removed successfully"
             )
         )

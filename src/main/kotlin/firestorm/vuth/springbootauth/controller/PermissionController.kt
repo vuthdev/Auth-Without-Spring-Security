@@ -43,7 +43,7 @@ class PermissionController(
         permissionService.deleteById(permissionId)
         return ResponseEntity.ok(
             ApiSuccess.message(
-                message = "Permission deleted successfully",
+                message = "Permission deleted successfully"
             )
         )
     }

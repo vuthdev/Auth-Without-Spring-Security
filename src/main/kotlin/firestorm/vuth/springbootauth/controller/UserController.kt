@@ -97,7 +97,7 @@ class UserController(
     @RequiresPermission("DELETE_USERS")
     fun deleteUser(@PathVariable userId: UUID): ResponseEntity<ApiResponse<Nothing>> {
         userService.deleteUser(userId)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+        return ResponseEntity.ok(
             ApiSuccess.message(
                 message = "User deleted successfully"
             )

@@ -12,7 +12,6 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import tools.jackson.databind.ObjectMapper
-import java.util.UUID
 
 @Component
 class JwtFilter(
@@ -44,9 +43,9 @@ class JwtFilter(
         }
 
         try {
-            val claims = jwtService.parseClaims(token.removePrefix("Bearer "))
-            val userId = UUID.fromString(claims.subject)
-            val user = userRepository.findByIdWithRole(userId) ?: throw NotFoundException("user $userId not found")
+            val userId = jwtService.getUserIdFromToken(token.removePrefix("Bearer "))
+            val user = userRepository.findByIdWithRole(userId)
+                ?: throw NotFoundException("user $userId not found")
             request.setAttribute(CURRENT_USER, user)
         } catch (e: TokenException) {
             writeError(response, e.message ?: "Invalid token")
