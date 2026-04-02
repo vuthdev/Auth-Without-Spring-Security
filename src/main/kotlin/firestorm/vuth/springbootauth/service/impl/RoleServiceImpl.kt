@@ -23,6 +23,12 @@ class RoleServiceImpl(
 ): RoleService {
     override fun createRole(request: CreateRoleRequest) {
         LogUtil.info("Creating role $request")
+
+        if (roleRepository.existsByRoleName(request.roleName)) {
+            LogUtil.error("Role $request.roleName already exists.")
+            throw AlreadyExistsException("Role $request.roleName already exists")
+        }
+
         val permission = permissionRepository.findAllById(request.permission).toHashSet()
 
         val missingId = request.permission - permission.map { it.id }.toHashSet()

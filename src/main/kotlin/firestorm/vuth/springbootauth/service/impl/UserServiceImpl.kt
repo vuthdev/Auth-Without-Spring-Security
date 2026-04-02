@@ -65,7 +65,7 @@ class UserServiceImpl(
         )
 
         userRepo.save(user)
-        LogUtil.info("Registered new user ${user.username}")
+        LogUtil.info("Registered new user: ${user.username}")
     }
 
     override fun viewProfile(): ProfileResponse {
@@ -142,14 +142,14 @@ class UserServiceImpl(
         }
 
         if (user.role?.roleName == request.roleName) {
-            LogUtil.error("User already has that role ${request.roleName}")
-            throw AlreadyExistsException("User already has that role ${request.roleName}")
+            LogUtil.error("User already has the role: ${request.roleName}")
+            throw AlreadyExistsException("User already has the role: ${request.roleName}")
         }
 
         val role = roleRepo.findByRoleName(request.roleName)
             ?: run {
-                LogUtil.error("role ${request.roleName} not found")
-                throw NotFoundException("role ${request.roleName} not found")
+                LogUtil.error("role not found with name: ${request.roleName}")
+                throw NotFoundException("role not found with name: ${request.roleName}")
             }
 
         user.role = role
