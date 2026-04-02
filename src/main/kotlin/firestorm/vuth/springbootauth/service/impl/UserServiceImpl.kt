@@ -41,8 +41,10 @@ class UserServiceImpl(
             throw UnauthorizedException("incorrect password")
         }
 
+        LogUtil.info("Logging into user ${user.username}")
+        val accessToken = jwtService.generateAccessToken(user)
         return LoginResponse(
-            accessToken = jwtService.generateAccessToken(user)
+            accessToken = accessToken
         )
     }
 
@@ -83,7 +85,7 @@ class UserServiceImpl(
         val viewer = authContext.getCurrentUser()
         val targetProfile = target.toProfileResponse()
 
-        LogUtil.info("${viewer.username} viewed ${target.username}'s profile", targetProfile)
+        LogUtil.info("${viewer.username} viewed ${target.username}'s profile")
         return targetProfile
     }
 

@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component
 class AuthContext(
     private val request: HttpServletRequest
 ) {
-    fun getCurrentUser(): User {
-        return (request.getAttribute(JwtFilter.CURRENT_USER) ?: throw UnauthorizedException("missing token")) as User
-    }
+    fun getCurrentUser(): User =
+        (request.getAttribute(JwtFilter.CURRENT_USER)
+            ?: throw UnauthorizedException("missing token")) as User
+
+    fun isAuthenticated(): Boolean =
+        (request.getAttribute(JwtFilter.CURRENT_USER) != null)
 }

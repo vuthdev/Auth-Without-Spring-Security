@@ -51,7 +51,6 @@ class RoleController(
     fun deleteRole(
         @PathVariable roleId: UUID
     ): ResponseEntity<BaseResponse<Nothing>> {
-        log.info { "Deleting role $roleId" }
         roleService.deleteById(roleId)
         return ResponseEntity.ok(
             ApiSuccess.message(
@@ -63,7 +62,6 @@ class RoleController(
     @GetMapping
     @RequiresPermission("READ_ROLE")
     fun getAll(): ResponseEntity<BaseResponse<List<RoleResponse>>> {
-        log.info { "Getting all roles" }
         return ResponseEntity.status(HttpStatus.OK).body(
             ApiSuccess.withData(
                 data = roleService.findAll(),

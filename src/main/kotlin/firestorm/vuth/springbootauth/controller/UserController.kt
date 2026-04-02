@@ -34,7 +34,6 @@ class UserController(
     @PostMapping
     @RequiresPermission("CREATE_USERS")
     fun createUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<BaseResponse<Nothing>> {
-        log.info { "Creating user" }
         userService.createUser(request)
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -47,7 +46,6 @@ class UserController(
     @GetMapping
     @RequiresPermission("READ_USERS")
     fun findAll(): ResponseEntity<BaseResponse<List<UserResponse>>> {
-        log.info { "Reading user" }
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = userService.getAll(),
@@ -58,7 +56,6 @@ class UserController(
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<LoginResponse>> {
-        log.info { "Logging in ${request.username}" }
         return ResponseEntity.status(HttpStatus.OK).body(
             ApiSuccess.withData(
                 data = userService.login(request),
