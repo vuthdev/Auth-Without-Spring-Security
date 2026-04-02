@@ -10,6 +10,7 @@ import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
+private val log = KotlinLogging.logger {}
+
 @RestController
 @RequestMapping("/user")
 class UserController(
@@ -31,7 +34,9 @@ class UserController(
     @PostMapping
     @RequiresPermission("CREATE_USERS")
     fun createUser(@Valid @RequestBody request: CreateUserRequest): ResponseEntity<BaseResponse<Nothing>> {
+        log.info { "Creating user" }
         userService.createUser(request)
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiSuccess.message(
                 message = "Created user successfully"
@@ -42,6 +47,7 @@ class UserController(
     @GetMapping
     @RequiresPermission("READ_USERS")
     fun findAll(): ResponseEntity<BaseResponse<List<UserResponse>>> {
+        log.info { "Reading user" }
         return ResponseEntity.ok(
             ApiSuccess.withData(
                 data = userService.getAll(),
@@ -52,6 +58,7 @@ class UserController(
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<LoginResponse>> {
+        log.info { "Logging in ${request.username}" }
         return ResponseEntity.status(HttpStatus.OK).body(
             ApiSuccess.withData(
                 data = userService.login(request),

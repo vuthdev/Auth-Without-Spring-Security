@@ -21,4 +21,5 @@ interface PermissionRepository: JpaRepository<Permission, UUID> {
         nativeQuery = true
     )
     fun existsByPermissionAndRole(permissions: List<String>, roleId: UUID?): Int
+    fun existsByPermissionName(permissionName: String): Boolean
 }

@@ -2,18 +2,37 @@ package firestorm.vuth.springbootauth.utils
 
 import org.aspectj.apache.bcel.classfile.JavaClass
 import org.slf4j.LoggerFactory
-import tools.jackson.databind.ObjectMapper
 
 object LogUtil {
-    private val objectMapper = ObjectMapper()
-    private val logger = LoggerFactory.getLogger(JavaClass::class.java)
+    private val log = LoggerFactory.getLogger(JavaClass::class.java)
 
-    fun logJson(label: String, data: Any?) {
-        try {
-            val json: String = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(data)
-            logger.info("$label: $json")
-        } catch (e: Exception) {
-            logger.error("Failed to serialize log data", e)
+    fun info(message: String) = log.info(message)
+
+    fun info(message: String, vararg args: Any?) {
+        if (log.isInfoEnabled) {
+            log.info(message, *args)
+        }
+    }
+
+    fun debug(message: String, args: Any) = log.debug(message, args)
+
+    fun debug(message: String, vararg args: Any?) {
+        if (log.isDebugEnabled) {
+            log.debug(message, args)
+        }
+    }
+
+    fun warn(message: String, args: Any) = log.warn(message, args)
+    fun warn(message: String, vararg args: Any?) {
+        if (log.isWarnEnabled) {
+            log.warn(message, args)
+        }
+    }
+
+    fun error(message: String, args: Any) = log.error(message, args)
+    fun error(message: String, vararg args: Any?) {
+        if (log.isErrorEnabled) {
+            log.error(message, args)
         }
     }
 }

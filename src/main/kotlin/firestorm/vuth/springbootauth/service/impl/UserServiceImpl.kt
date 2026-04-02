@@ -15,6 +15,7 @@ import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.context.AuthContext
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
+import firestorm.vuth.springbootauth.exception.AlreadyExistsException
 import firestorm.vuth.springbootauth.mapper.toProfileResponse
 import firestorm.vuth.springbootauth.utils.LogUtil
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -31,7 +32,10 @@ class UserServiceImpl(
 ): UserService {
     override fun login(request: AuthRequest): LoginResponse {
         val user = userRepo.findByUsername(request.username)
-            ?: throw NotFoundException("username not found")
+            ?: run {
+                LogUtil.error("User not found with username: ${request.username}")
+                throw NotFoundException("User not found with username: ${request.username}")
+            }
 
         if (!passwordEncoder.matches(request.password, user.password)) {
             throw UnauthorizedException("incorrect password")
@@ -44,11 +48,15 @@ class UserServiceImpl(
 
     override fun register(request: AuthRequest) {
         if (userRepo.existsByUsername(request.username)) {
-            throw UnauthorizedException("User already exists")
+            LogUtil.error("User already exists")
+            throw AlreadyExistsException("User already exists")
         }
 
-        val defaultRole = roleRepo.findByRoleName("user")
-            ?: throw NotFoundException("role not found")
+        val defaultRoleId = UUID.fromString("7a47a0d9-da32-4fc6-8ff3-a11f9ae4071b")
+        val defaultRole = roleRepo.findById(defaultRoleId).orElseThrow {
+            LogUtil.error("Cannot find default role")
+            NotFoundException("role not found")
+        }
 
         val user = User(
             username = request.username,
@@ -57,32 +65,41 @@ class UserServiceImpl(
         )
 
         userRepo.save(user)
+        LogUtil.info("Registered new user ${user.username}")
     }
 
     override fun viewProfile(): ProfileResponse {
         val user = authContext.getCurrentUser()
 
-        LogUtil.logJson("${user.username} viewed profile", user.toProfileResponse())
+        LogUtil.info("${user.username} viewed profile", user.toProfileResponse())
         return user.toProfileResponse()
     }
 
     override fun viewUserProfile(userId: UUID): ProfileResponse {
-        val target = userRepo.findById(userId)
-            .orElseThrow { NotFoundException("user not found") }
+        val target = userRepo.findById(userId).orElseThrow {
+            LogUtil.error("User not found")
+            NotFoundException("User not found")
+        }
         val viewer = authContext.getCurrentUser()
         val targetProfile = target.toProfileResponse()
 
-        LogUtil.logJson("${viewer.username} viewed ${target.username}'s profile", targetProfile)
+        LogUtil.info("${viewer.username} viewed ${target.username}'s profile", targetProfile)
         return targetProfile
     }
 
     override fun createUser(request: CreateUserRequest) {
+        LogUtil.info("creating user ${request.username}")
+
         if (userRepo.existsByUsername(request.username)) {
-            throw UnauthorizedException("User already exists")
+            LogUtil.info("${request.username} already exists")
+            throw AlreadyExistsException("User already exists")
         }
 
         val role = roleRepo.findByRoleName(request.role)
-            ?: throw NotFoundException("role not found")
+            ?: run {
+                LogUtil.info("${request.role} doesn't exists")
+                throw NotFoundException("Role doesn't exists")
+            }
 
         val user = User(
             username = request.username,
@@ -91,25 +108,52 @@ class UserServiceImpl(
         )
 
         userRepo.save(user)
+        LogUtil.info("${user.username} created successfully")
     }
 
     override fun getAll(): List<UserResponse> {
+        LogUtil.info("Fetching all users")
+
         val users = userRepo.findAll().toResponse()
-        LogUtil.logJson("${userRepo.count()} users found", users)
+        if (users.isEmpty()) {
+            LogUtil.info("No users found")
+            return emptyList()
+        }
+
+        LogUtil.info("Fetched ${users.size} users")
         return users
     }
 
-    override fun deleteUser(id: UUID) =
-        userRepo.deleteById(id)
-
-    override fun assignRole(userId: UUID, request: AssignRoleRequest) {
-        val user = userRepo.findById(userId).orElseThrow { NotFoundException("user not found") }
-
-        request.roleName.let {
-            user.role = roleRepo.findByRoleName(it)
-                ?: throw NotFoundException("role not found")
+    override fun deleteUser(id: UUID) {
+        LogUtil.info("deleting user with id $id")
+        if (!userRepo.existsById(id)) {
+            LogUtil.error("Cannot delete, User with id $id does not exist")
+            throw AlreadyExistsException("user with id $id does not exist")
         }
 
+        userRepo.deleteById(id)
+        LogUtil.info("User deleted successfully with id: $id")
+    }
+
+    override fun assignRole(userId: UUID, request: AssignRoleRequest) {
+        val user = userRepo.findById(userId).orElseThrow {
+            LogUtil.error("user not found with id: $userId")
+            NotFoundException("user not found with id: $userId")
+        }
+
+        if (user.role?.roleName == request.roleName) {
+            LogUtil.error("User already has that role ${request.roleName}")
+            throw AlreadyExistsException("User already has that role ${request.roleName}")
+        }
+
+        val role = roleRepo.findByRoleName(request.roleName)
+            ?: run {
+                LogUtil.error("role ${request.roleName} not found")
+                throw NotFoundException("role ${request.roleName} not found")
+            }
+
+        user.role = role
         userRepo.save(user)
+        LogUtil.info("User assigned role ${role.roleName} successfully")
     }
 }
