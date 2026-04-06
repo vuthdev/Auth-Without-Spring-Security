@@ -52,7 +52,7 @@ class PermissionController(
     @RequiresPermission("READ_PERMISSION")
     fun listAllPermissions(): ResponseEntity<BaseResponse<List<PermissionResponse>>> {
         return ResponseEntity.ok(
-            ApiSuccess.withData(
+            ApiSuccess.message(
                 data = permissionService.findAll(),
                 message = "Permissions retrieved successfully"
             )

@@ -19,7 +19,7 @@ class JwtFilter(
     private val userRepository: UserRepository,
     private val objectMapper: ObjectMapper
 ): OncePerRequestFilter() {
-    private val whiteList = listOf("/user/login", "/user/register")
+    private val whiteList = listOf("/user/login", "/user/register", "/user/refresh")
 
     companion object {
         const val CURRENT_USER = "currentUser"

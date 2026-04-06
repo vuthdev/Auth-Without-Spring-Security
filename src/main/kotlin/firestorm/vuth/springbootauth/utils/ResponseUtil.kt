@@ -4,14 +4,14 @@ import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import org.springframework.http.HttpStatus
 
 object ApiSuccess {
-    fun <T> withData(status: HttpStatus = HttpStatus.OK, data: T, message: String = "Success") =
+    fun <T> message(status: HttpStatus = HttpStatus.OK, data: T, message: String = "Success") =
         BaseResponse(
             status = status.value(),
             data = data,
             message = message
         )
 
-    fun message(status: HttpStatus = HttpStatus.OK, message: String) =
+    fun message(status: HttpStatus = HttpStatus.OK, message: String = "Success") =
         BaseResponse(
             status = status.value(),
             data = null,

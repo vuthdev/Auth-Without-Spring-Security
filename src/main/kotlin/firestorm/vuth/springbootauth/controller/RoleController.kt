@@ -10,7 +10,6 @@ import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
-private val log = KotlinLogging.logger {}
-
 @RestController
 @RequestMapping("/roles")
 class RoleController(
@@ -36,7 +33,6 @@ class RoleController(
     fun createRole(
         @Valid @RequestBody request: CreateRoleRequest
     ): ResponseEntity<BaseResponse<Nothing>> {
-        log.info { "Creating role ${request.roleName}" }
         roleService.createRole(request)
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ApiSuccess.message(
@@ -63,7 +59,7 @@ class RoleController(
     @RequiresPermission("READ_ROLE")
     fun getAll(): ResponseEntity<BaseResponse<List<RoleResponse>>> {
         return ResponseEntity.status(HttpStatus.OK).body(
-            ApiSuccess.withData(
+            ApiSuccess.message(
                 data = roleService.findAll(),
                 message = "Role retrieved successfully"
             )
@@ -74,7 +70,7 @@ class RoleController(
     @RequiresPermission("READ_ROLE_PERMISSION")
     fun getRolePermission(@PathVariable roleId: UUID): ResponseEntity<BaseResponse<RoleResponse>> {
         return ResponseEntity.ok(
-            ApiSuccess.withData(
+            ApiSuccess.message(
                 data = roleService.getAllRolePermissions(roleId),
                 message = "Role permissions successfully retrieved"
             )

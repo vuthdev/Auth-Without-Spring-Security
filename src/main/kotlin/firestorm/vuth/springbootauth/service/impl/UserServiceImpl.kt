@@ -2,7 +2,7 @@ package firestorm.vuth.springbootauth.service.impl
 
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
-import firestorm.vuth.springbootauth.dto.response.LoginResponse
+import firestorm.vuth.springbootauth.dto.response.AuthResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.UnauthorizedException
@@ -14,6 +14,7 @@ import firestorm.vuth.springbootauth.security.JwtService
 import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.context.AuthContext
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
+import firestorm.vuth.springbootauth.dto.request.RefreshTokenRequest
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.exception.AlreadyExistsException
 import firestorm.vuth.springbootauth.mapper.toProfileResponse
@@ -30,7 +31,7 @@ class UserServiceImpl(
     private val jwtService: JwtService,
     private val authContext: AuthContext
 ): UserService {
-    override fun login(request: AuthRequest): LoginResponse {
+    override fun login(request: AuthRequest): AuthResponse {
         val user = userRepo.findByUsername(request.username)
             ?: run {
                 LogUtil.error("User not found with username: ${request.username}")
@@ -38,13 +39,15 @@ class UserServiceImpl(
             }
 
         if (!passwordEncoder.matches(request.password, user.password)) {
-            throw UnauthorizedException("incorrect password")
+            throw UnauthorizedException("Incorrect password")
         }
 
         LogUtil.info("Logging into user ${user.username}")
         val accessToken = jwtService.generateAccessToken(user)
-        return LoginResponse(
-            accessToken = accessToken
+        val refreshToken = jwtService.generateRefreshToken(user)
+        return AuthResponse(
+            accessToken = accessToken,
+            refreshToken = refreshToken,
         )
     }
 
@@ -70,10 +73,26 @@ class UserServiceImpl(
         LogUtil.info("Registered new user: ${user.username}")
     }
 
+    override fun refresh(request: RefreshTokenRequest): AuthResponse {
+        if (!jwtService.isValidRefreshToken(request.refreshToken)) {
+            throw UnauthorizedException("Incorrect refresh token")
+        }
+
+        val userId = jwtService.getUserIdFromToken(request.refreshToken)
+        val user = userRepo.findById(userId).orElseThrow { NotFoundException("User not found with id: $userId") }
+
+        val accessToken = jwtService.generateAccessToken(user)
+        val refreshToken = jwtService.generateRefreshToken(user)
+        return AuthResponse(
+            accessToken,
+            refreshToken
+        )
+    }
+
     override fun viewProfile(): ProfileResponse {
         val user = authContext.getCurrentUser()
 
-        LogUtil.info("${user.username} viewed profile", user.toProfileResponse())
+        LogUtil.info("${user.username} viewed profile")
         return user.toProfileResponse()
     }
 
@@ -139,8 +158,8 @@ class UserServiceImpl(
 
     override fun assignRole(userId: UUID, request: AssignRoleRequest) {
         val user = userRepo.findById(userId).orElseThrow {
-            LogUtil.error("user not found with id: $userId")
-            NotFoundException("user not found with id: $userId")
+            LogUtil.error("User not found with id: $userId")
+            NotFoundException("User not found with id: $userId")
         }
 
         if (user.role?.roleName == request.roleName) {
@@ -150,8 +169,8 @@ class UserServiceImpl(
 
         val role = roleRepo.findByRoleName(request.roleName)
             ?: run {
-                LogUtil.error("role not found with name: ${request.roleName}")
-                throw NotFoundException("role not found with name: ${request.roleName}")
+                LogUtil.error("Role not found with name: ${request.roleName}")
+                throw NotFoundException("Role not found with name: ${request.roleName}")
             }
 
         user.role = role

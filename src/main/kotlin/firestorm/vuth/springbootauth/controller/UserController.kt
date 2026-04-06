@@ -4,13 +4,13 @@ import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.dto.request.AssignRoleRequest
 import firestorm.vuth.springbootauth.dto.request.AuthRequest
 import firestorm.vuth.springbootauth.dto.request.CreateUserRequest
+import firestorm.vuth.springbootauth.dto.request.RefreshTokenRequest
 import firestorm.vuth.springbootauth.dto.response.BaseResponse
-import firestorm.vuth.springbootauth.dto.response.LoginResponse
+import firestorm.vuth.springbootauth.dto.response.AuthResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.service.UserService
 import firestorm.vuth.springbootauth.utils.ApiSuccess
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-
-private val log = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/user")
@@ -47,7 +45,7 @@ class UserController(
     @RequiresPermission("READ_USERS")
     fun findAll(): ResponseEntity<BaseResponse<List<UserResponse>>> {
         return ResponseEntity.ok(
-            ApiSuccess.withData(
+            ApiSuccess.message(
                 data = userService.getAll(),
                 message = "Users retrieved successfully"
             )
@@ -55,33 +53,11 @@ class UserController(
     }
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<LoginResponse>> {
+    fun login(@Valid @RequestBody request: AuthRequest): ResponseEntity<BaseResponse<AuthResponse>> {
         return ResponseEntity.status(HttpStatus.OK).body(
-            ApiSuccess.withData(
+            ApiSuccess.message(
                 data = userService.login(request),
                 message = "Login successful"
-            )
-        )
-    }
-
-    @GetMapping("/profile")
-    @RequiresPermission("VIEW_PROFILE")
-    fun profile(): ResponseEntity<BaseResponse<ProfileResponse>> {
-        return ResponseEntity.ok(
-            ApiSuccess.withData(
-                data = userService.viewProfile(),
-                message = "Profile retrieved successfully"
-            )
-        )
-    }
-
-    @GetMapping("/profile/{userId}")
-    @RequiresPermission("VIEW_OTHER_PROFILE")
-    fun profileOther(@PathVariable userId: UUID): ResponseEntity<BaseResponse<ProfileResponse>> {
-        return ResponseEntity.ok(
-            ApiSuccess.withData(
-                data = userService.viewUserProfile(userId),
-                message = "Profile retrieved successfully"
             )
         )
     }
@@ -96,6 +72,40 @@ class UserController(
             )
         )
     }
+
+    @PostMapping("/refresh")
+    fun refresh(@Valid @RequestBody request: RefreshTokenRequest): ResponseEntity<BaseResponse<AuthResponse>> {
+        userService.refresh(request)
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ApiSuccess.message(
+                data = userService.refresh(request),
+                message = "Generated successful"
+            )
+        )
+    }
+
+    @GetMapping("/profile")
+    @RequiresPermission("VIEW_PROFILE")
+    fun profile(): ResponseEntity<BaseResponse<ProfileResponse>> {
+        return ResponseEntity.ok(
+            ApiSuccess.message(
+                data = userService.viewProfile(),
+                message = "Profile retrieved successfully"
+            )
+        )
+    }
+
+    @GetMapping("/profile/{userId}")
+    @RequiresPermission("VIEW_OTHER_PROFILE")
+    fun profileOther(@PathVariable userId: UUID): ResponseEntity<BaseResponse<ProfileResponse>> {
+        return ResponseEntity.ok(
+            ApiSuccess.message(
+                data = userService.viewUserProfile(userId),
+                message = "Profile retrieved successfully"
+            )
+        )
+    }
+
 
     @DeleteMapping("/{userId}")
     @RequiresPermission("DELETE_USERS")

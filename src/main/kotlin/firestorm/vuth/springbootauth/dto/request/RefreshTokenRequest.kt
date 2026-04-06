@@ -2,10 +2,7 @@ package firestorm.vuth.springbootauth.dto.request
 
 import jakarta.validation.constraints.NotBlank
 
-data class AuthRequest(
+data class RefreshTokenRequest(
     @field:NotBlank
-    val username: String,
-
-    @field:NotBlank
-    val password: String
+    val refreshToken: String
 )

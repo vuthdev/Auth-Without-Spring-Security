@@ -121,7 +121,7 @@ class RoleServiceImpl(
             return roleList
         }
 
-        LogUtil.info("Retrieved ${roleList.size} roles", roleList)
+        LogUtil.info("Retrieved ${roleList.size} roles")
         return roleList
     }
 
@@ -134,7 +134,7 @@ class RoleServiceImpl(
             }
         val roleList = role.toResponse()
 
-        LogUtil.info("${role.permissions.size} permissions found", roleList)
+        LogUtil.info("${role.permissions.size} permissions found")
         return roleList
     }
 

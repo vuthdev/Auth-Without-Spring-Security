@@ -8,12 +8,6 @@ object LogUtil {
 
     fun info(message: String) = log.info(message)
 
-    fun info(message: String, vararg args: Any?) {
-        if (log.isInfoEnabled) {
-            log.info(message, *args)
-        }
-    }
-
     fun debug(message: String, args: Any) = log.debug(message, args)
 
     fun debug(message: String, vararg args: Any?) {
@@ -32,7 +26,7 @@ object LogUtil {
     fun error(message: String, args: Any) = log.error(message, args)
     fun error(message: String, vararg args: Any?) {
         if (log.isErrorEnabled) {
-            log.error(message, args)
+            log.error(message, *args)
         }
     }
 }
