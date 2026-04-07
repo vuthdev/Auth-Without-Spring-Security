@@ -44,7 +44,7 @@ class JwtService {
             "username" to user.username,
             "type" to "refresh"
         )
-        return buildToken(user, claims, accessTokenExpire)
+        return buildToken(user, claims, refreshTokenExpire)
     }
 
     fun buildToken(user: User, extraClaims: Map<String, Any?>, expiration: Long): String {
@@ -68,6 +68,11 @@ class JwtService {
     fun isValidRefreshToken(token: String): Boolean {
         val claims = parseClaims(token)
         return claims["type"] == "refresh" && !isTokenExpired(token)
+    }
+
+    fun isValidAccessToken(token: String): Boolean {
+        val claims = parseClaims(token)
+        return claims["type"] == "access" && !isTokenExpired(token)
     }
 
     private fun isTokenExpired(token: String): Boolean {

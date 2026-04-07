@@ -42,8 +42,16 @@ class JwtFilter(
             return
         }
 
+
         try {
-            val userId = jwtService.getUserIdFromToken(token.removePrefix("Bearer "))
+            val rawToken = token.removePrefix("Bearer ")
+
+            if (!jwtService.isValidAccessToken(rawToken)) {
+                writeError(response, "Invalid or wrong token type")
+                return
+            }
+
+            val userId = jwtService.getUserIdFromToken(rawToken)
             val user = userRepository.findByIdWithRole(userId)
                 ?: throw NotFoundException("user $userId not found")
             request.setAttribute(CURRENT_USER, user)
