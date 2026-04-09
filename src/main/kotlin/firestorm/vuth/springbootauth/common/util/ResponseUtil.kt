@@ -1,4 +1,4 @@
-package firestorm.vuth.springbootauth.utils
+package firestorm.vuth.springbootauth.common.util
 
 import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import org.springframework.http.HttpStatus

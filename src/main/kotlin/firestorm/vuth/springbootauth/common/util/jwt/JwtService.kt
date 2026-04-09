@@ -1,4 +1,4 @@
-package firestorm.vuth.springbootauth.security
+package firestorm.vuth.springbootauth.common.util.jwt
 
 import firestorm.vuth.springbootauth.exception.TokenException
 import firestorm.vuth.springbootauth.model.User
@@ -98,8 +98,7 @@ class JwtService {
         }
 
     private fun getSignKey(): SecretKey {
-        val keyBytes = Base64.getDecoder().decode(secret)
+        val keyBytes = Base64.getUrlDecoder().decode(secret)
         return Keys.hmacShaKeyFor(keyBytes)
     }
 }
-

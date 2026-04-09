@@ -9,7 +9,7 @@ import firestorm.vuth.springbootauth.dto.request.UpdateRoleRequest
 import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import firestorm.vuth.springbootauth.dto.response.RoleResponse
 import firestorm.vuth.springbootauth.service.RoleService
-import firestorm.vuth.springbootauth.utils.ApiSuccess
+import firestorm.vuth.springbootauth.common.util.ApiSuccess
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

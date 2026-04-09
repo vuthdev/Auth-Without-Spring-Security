@@ -12,7 +12,7 @@ import firestorm.vuth.springbootauth.model.Role
 import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.repository.RoleRepository
 import firestorm.vuth.springbootauth.service.RoleService
-import firestorm.vuth.springbootauth.utils.LogUtil
+import firestorm.vuth.springbootauth.common.util.LogUtil
 import org.springframework.stereotype.Service
 import java.util.UUID
 

@@ -7,7 +7,7 @@ import firestorm.vuth.springbootauth.mapper.toResponse
 import firestorm.vuth.springbootauth.model.Permission
 import firestorm.vuth.springbootauth.repository.PermissionRepository
 import firestorm.vuth.springbootauth.service.PermissionService
-import firestorm.vuth.springbootauth.utils.LogUtil
+import firestorm.vuth.springbootauth.common.util.LogUtil
 import org.springframework.stereotype.Service
 import java.util.UUID
 

@@ -5,7 +5,7 @@ import firestorm.vuth.springbootauth.dto.request.CreatePermissionRequest
 import firestorm.vuth.springbootauth.dto.response.BaseResponse
 import firestorm.vuth.springbootauth.dto.response.PermissionResponse
 import firestorm.vuth.springbootauth.service.PermissionService
-import firestorm.vuth.springbootauth.utils.ApiSuccess
+import firestorm.vuth.springbootauth.common.util.ApiSuccess
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

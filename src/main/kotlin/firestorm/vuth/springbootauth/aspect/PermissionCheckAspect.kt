@@ -3,7 +3,7 @@ package firestorm.vuth.springbootauth.aspect
 import firestorm.vuth.springbootauth.annotation.RequiresPermission
 import firestorm.vuth.springbootauth.exception.ForbiddenException
 import firestorm.vuth.springbootauth.repository.PermissionRepository
-import firestorm.vuth.springbootauth.context.AuthContext
+import firestorm.vuth.springbootauth.common.context.AuthContext
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.springframework.stereotype.Component

@@ -3,8 +3,8 @@ package firestorm.vuth.springbootauth.filter
 import firestorm.vuth.springbootauth.exception.NotFoundException
 import firestorm.vuth.springbootauth.exception.TokenException
 import firestorm.vuth.springbootauth.repository.UserRepository
-import firestorm.vuth.springbootauth.security.JwtService
-import firestorm.vuth.springbootauth.utils.ApiError
+import firestorm.vuth.springbootauth.common.util.jwt.JwtService
+import firestorm.vuth.springbootauth.common.util.ApiError
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -41,7 +41,6 @@ class JwtFilter(
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "missing token")
             return
         }
-
 
         try {
             val rawToken = token.removePrefix("Bearer ")

@@ -1,4 +1,4 @@
-package firestorm.vuth.springbootauth.utils
+package firestorm.vuth.springbootauth.common.util
 
 import org.aspectj.apache.bcel.classfile.JavaClass
 import org.slf4j.LoggerFactory

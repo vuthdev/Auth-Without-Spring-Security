@@ -1,12 +1,11 @@
 package firestorm.vuth.springbootauth.exception
 
 import firestorm.vuth.springbootauth.dto.response.BaseResponse
-import firestorm.vuth.springbootauth.utils.ApiError
+import firestorm.vuth.springbootauth.common.util.ApiError
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 

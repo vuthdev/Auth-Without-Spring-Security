@@ -1,4 +1,4 @@
-package firestorm.vuth.springbootauth.context
+package firestorm.vuth.springbootauth.common.context
 
 import firestorm.vuth.springbootauth.exception.UnauthorizedException
 import firestorm.vuth.springbootauth.filter.JwtFilter

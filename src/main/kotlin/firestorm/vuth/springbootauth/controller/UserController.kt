@@ -10,7 +10,7 @@ import firestorm.vuth.springbootauth.dto.response.AuthResponse
 import firestorm.vuth.springbootauth.dto.response.ProfileResponse
 import firestorm.vuth.springbootauth.dto.response.UserResponse
 import firestorm.vuth.springbootauth.service.UserService
-import firestorm.vuth.springbootauth.utils.ApiSuccess
+import firestorm.vuth.springbootauth.common.util.ApiSuccess
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
