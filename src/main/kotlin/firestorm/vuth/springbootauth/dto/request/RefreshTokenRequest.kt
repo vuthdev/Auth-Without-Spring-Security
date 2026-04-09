@@ -1,8 +1,8 @@
 package firestorm.vuth.springbootauth.dto.request
 
-import jakarta.validation.constraints.NotBlank
+import firestorm.vuth.springbootauth.annotation.IsNotEmptyString
 
 data class RefreshTokenRequest(
-    @field:NotBlank
+    @field:IsNotEmptyString
     val refreshToken: String
 )

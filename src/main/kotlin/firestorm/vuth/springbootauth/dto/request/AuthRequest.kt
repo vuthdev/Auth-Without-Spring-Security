@@ -1,11 +1,12 @@
 package firestorm.vuth.springbootauth.dto.request
 
+import firestorm.vuth.springbootauth.annotation.IsNotEmptyString
 import jakarta.validation.constraints.NotBlank
 
 data class AuthRequest(
-    @field:NotBlank
+    @field:IsNotEmptyString
     val username: String,
 
-    @field:NotBlank
+    @field:IsNotEmptyString
     val password: String
 )
